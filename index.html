@@ -857,31 +857,27 @@
 // ═══════════════════════════════════════════════════════
 // CONFIG SUPABASE
 // ═══════════════════════════════════════════════════════
-const SB_URL = 'https://gcxwbgsdblbachjgheqq.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjeHdiZ3NkYmxiYWNoamdoZXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjIxNTEsImV4cCI6MjA4ODgzODE1MX0.awOma2ufFoEa7LjxWZe6SgR7TOGbM_D9kY-wmLB0ZG8';
-const CLIENT_SLUG = 'mainenor'; // ← identifiant unique du site client
+const SB_URL     = 'https://gcxwbgsdblbachjgheqq.supabase.co';
+const SB_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjeHdiZ3NkYmxiYWNoamdoZXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjIxNTEsImV4cCI6MjA4ODgzODE1MX0.awOma2ufFoEa7LjxWZe6SgR7TOGbM_D9kY-wmLB0ZG8';
+const CLIENT_SLUG = 'mainenor';
 
 // ═══════════════════════════════════════════════════════
-// VALEURS PAR DÉFAUT (fallback si Supabase indisponible)
+// VALEURS PAR DÉFAUT (fallback)
 // ═══════════════════════════════════════════════════════
 const DEFAULTS = {
-  // Hero
   hero_titre:   "L'artisanat<br>au <span>service</span><br>de vos projets",
-  hero_sub:     "Depuis 15 ans, Maçonnerie Mainenor transforme vos espaces avec précision et passion. Construction, rénovation, ravalement — nous réalisons votre vision.",
+  hero_sub:     "Depuis 15 ans, Maçonnerie Mainenor transforme vos espaces avec précision et passion.",
   hero_tag:     "Maçonnerie & Rénovation — Région Parisienne",
-  // Chiffres clés
-  kannees_v:    "15+",   kannees_l:    "Années d'expérience",
-  kchantiers_v: "480",   kchantiers_l: "Chantiers réalisés",
-  ksatis_v:     "98%",   ksatis_l:     "Clients satisfaits",
-  kartisans_v:  "12",    kartisans_l:  "Artisans qualifiés",
-  // Services
-  s1_icon: "🧱", s1_nom: "Maçonnerie Générale",  s1_desc: "Construction de murs, cloisons, dalles, fondations et structures en béton armé. Travail soigné, matériaux certifiés.",
-  s2_icon: "🏗️", s2_nom: "Rénovation Complète",  s2_desc: "Réhabilitation de logements anciens, extension, surélévation. On prend en charge l'ensemble du projet.",
-  s3_icon: "🪨", s3_nom: "Ravalement de Façade",  s3_desc: "Nettoyage, enduit, peinture extérieure. Redonner vie à votre façade tout en la protégeant durablement.",
-  s4_icon: "🔩", s4_nom: "Carrelage & Chape",    s4_desc: "Pose de carrelage, parquet, chape liquide ou traditionnelle. Finitions précises pour un résultat parfait.",
-  s5_icon: "🏠", s5_nom: "Terrassement",          s5_desc: "Terrassement, nivellement, création d'allées, escaliers extérieurs et aménagements paysagers en dur.",
-  s6_icon: "🛠️", s6_nom: "Petits Travaux",        s6_desc: "Réparations, reprises en sous-œuvre, colmatage de fissures, imperméabilisation — intervention rapide.",
-  // Contact
+  kannees_v: "15+",  kannees_l: "Années d'expérience",
+  kchantiers_v: "480", kchantiers_l: "Chantiers réalisés",
+  ksatis_v: "98%",   ksatis_l: "Clients satisfaits",
+  kartisans_v: "12", kartisans_l: "Artisans qualifiés",
+  s1_icon:"🧱", s1_nom:"Maçonnerie Générale",  s1_desc:"Construction de murs, cloisons, dalles, fondations et structures en béton armé.",
+  s2_icon:"🏗️", s2_nom:"Rénovation Complète",  s2_desc:"Réhabilitation de logements anciens, extension, surélévation.",
+  s3_icon:"🪨", s3_nom:"Ravalement de Façade",  s3_desc:"Nettoyage, enduit, peinture extérieure. Redonner vie à votre façade.",
+  s4_icon:"🔩", s4_nom:"Carrelage & Chape",     s4_desc:"Pose de carrelage, parquet, chape liquide ou traditionnelle.",
+  s5_icon:"🏠", s5_nom:"Terrassement",           s5_desc:"Terrassement, nivellement, création d'allées et escaliers extérieurs.",
+  s6_icon:"🛠️", s6_nom:"Petits Travaux",         s6_desc:"Réparations, reprises en sous-œuvre, colmatage de fissures.",
   telephone: "01 23 45 67 89",
   email:     "contact@mainenor.fr",
   adresse:   "Paris, Île-de-France",
@@ -889,72 +885,54 @@ const DEFAULTS = {
   nom_entreprise: "Maçonnerie Mainenor",
 };
 
-// Tarifs devis par défaut
 const TARIF_BASE_DEFAULT = {
-  maconnerie: 65, renovation: 85, ravalement: 45,
-  carrelage: 55, terrassement: 40, petits: 70
+  maconnerie:65, renovation:85, ravalement:45,
+  carrelage:55, terrassement:40, petits:70
 };
-const COEF_FINITION = { standard: 1, moyen: 1.35, premium: 1.75 };
+const COEF_FINITION = { standard:1, moyen:1.35, premium:1.75 };
 const DISPO_MAP = {
-  maconnerie: '3 semaines', renovation: '6 semaines', ravalement: '2 semaines',
-  carrelage: '2 semaines', terrassement: '1 semaine', petits: '48h'
+  maconnerie:'3 semaines', renovation:'6 semaines', ravalement:'2 semaines',
+  carrelage:'2 semaines', terrassement:'1 semaine', petits:'48h'
 };
 
+let tarifBase   = {...TARIF_BASE_DEFAULT};
+let siteConfig  = {...DEFAULTS};
+let activeModules = ['textes','galerie','devis']; // défaut : tout actif
+
 // ═══════════════════════════════════════════════════════
-// CHARGEMENT SUPABASE
+// GESTION DES MODULES — afficher/masquer les sections
 // ═══════════════════════════════════════════════════════
-let tarifBase = {...TARIF_BASE_DEFAULT};
-let siteConfig = {...DEFAULTS};
+function applyModules() {
+  // Section galerie/réalisations — module "galerie"
+  const secGalerie = document.getElementById('realisations');
+  const navGalerie = document.querySelector('a[href="#realisations"]');
+  const hasGalerie = activeModules.includes('galerie');
+  if (secGalerie) secGalerie.style.display = hasGalerie ? '' : 'none';
+  if (navGalerie) navGalerie.parentElement.style.display = hasGalerie ? '' : 'none';
 
-async function loadFromSupabase() {
-  try {
-    const headers = {
-      'apikey': SB_KEY,
-      'Authorization': 'Bearer ' + SB_KEY
-    };
+  // Section simulateur — module "devis"
+  const secDevis = document.getElementById('simulateur');
+  const navDevis = document.querySelector('a[href="#simulateur"]');
+  const hasDevis = activeModules.includes('devis');
+  if (secDevis) secDevis.style.display = hasDevis ? '' : 'none';
+  if (navDevis) navDevis.parentElement.style.display = hasDevis ? '' : 'none';
 
-    // 1. Charger textes & config
-    const cfgRes = await fetch(
-      SB_URL + '/rest/v1/site_config?client_slug=eq.' + CLIENT_SLUG + '&select=cle,valeur',
-      { headers }
-    );
-    if (cfgRes.ok) {
-      const rows = await cfgRes.json();
-      rows.forEach(r => { siteConfig[r.cle] = r.valeur; });
-    }
+  // Hero CTA "Voir nos réalisations" — masquer si galerie off
+  const ctaGalerie = document.querySelector('a[href="#realisations"].btn-outline');
+  if (ctaGalerie) ctaGalerie.style.display = hasGalerie ? '' : 'none';
 
-    // 2. Charger config devis
-    const devisRes = await fetch(
-      SB_URL + '/rest/v1/site_devis_config?client_slug=eq.' + CLIENT_SLUG + '&actif=eq.true&select=type,label,tarif_base',
-      { headers }
-    );
-    if (devisRes.ok) {
-      const rows = await devisRes.json();
-      if (rows.length > 0) {
-        // Reset et rebuild depuis Supabase
-        tarifBase = {};
-        rows.forEach(r => { tarifBase[r.type] = parseFloat(r.tarif_base) || TARIF_BASE_DEFAULT[r.type]; });
-        // Mettre à jour le select devis avec les labels dynamiques
-        updateDevisSelect(rows);
-      }
-    }
+  // Hero CTA "Estimer mon projet" — masquer si devis off
+  const ctaDevis = document.querySelector('a[href="#simulateur"].btn-primary');
+  if (ctaDevis) ctaDevis.style.display = hasDevis ? '' : 'none';
 
-    // 3. Charger galerie photos
-    const galRes = await fetch(
-      SB_URL + '/rest/v1/site_galerie?client_slug=eq.' + CLIENT_SLUG + '&order=ordre.asc&select=photo_url,legende',
-      { headers }
-    );
-    if (galRes.ok) {
-      const photos = await galRes.json();
-      if (photos.length > 0) updateGalerie(photos);
-    }
-
-  } catch (e) {
-    console.warn('Supabase indisponible, utilisation des valeurs par défaut.', e);
-  }
-
-  // Toujours appliquer la config (Supabase ou défaut)
-  applyConfig();
+  // Section textes (services + chiffres) — module "textes"
+  // On laisse toujours visible (c'est le contenu de base du site)
+  // mais si désactivé on cache l'édition avancée (section services)
+  const hasTextes = activeModules.includes('textes');
+  const secServices = document.getElementById('services');
+  const secChiffres = document.getElementById('chiffres');
+  // Les services et chiffres restent visibles même sans module textes
+  // (valeurs codées en dur), mais sans module on n'a pas la synchro DB
 }
 
 // ═══════════════════════════════════════════════════════
@@ -963,98 +941,137 @@ async function loadFromSupabase() {
 function applyConfig() {
   const c = siteConfig;
 
-  // ── Nom entreprise (titre onglet + logo nav)
-  const nomEl = document.querySelector('.nav-logo');
-  if (nomEl && c.nom_entreprise) nomEl.innerHTML = c.nom_entreprise;
+  // Nom entreprise
+  document.querySelectorAll('.nav-logo').forEach(el => { if(c.nom_entreprise) el.innerHTML = c.nom_entreprise; });
+  if (c.nom_entreprise) document.title = c.nom_entreprise + ' — Maçonnerie & Rénovation';
 
-  // ── Hero
+  // Hero
   const heroTag = document.querySelector('.hero-tag');
   if (heroTag && c.hero_tag) heroTag.textContent = c.hero_tag;
-
   const heroTitle = document.querySelector('.hero-title');
   if (heroTitle && c.hero_titre) heroTitle.innerHTML = c.hero_titre;
-
   const heroSub = document.querySelector('.hero-sub');
   if (heroSub && c.hero_sub) heroSub.textContent = c.hero_sub;
 
-  // ── Chiffres clés
+  // Chiffres
   const chiffres = document.querySelectorAll('.chiffre-item');
-  const kKeys = [
-    ['kannees_v',    'kannees_l'],
-    ['kchantiers_v', 'kchantiers_l'],
-    ['ksatis_v',     'ksatis_l'],
-    ['kartisans_v',  'kartisans_l']
-  ];
-  chiffres.forEach((el, i) => {
-    if (!kKeys[i]) return;
-    const [vk, lk] = kKeys[i];
-    const numEl   = el.querySelector('.chiffre-num');
-    const lblEl   = el.querySelector('.chiffre-label');
-    if (numEl && c[vk]) numEl.textContent = c[vk];
-    if (lblEl && c[lk]) lblEl.textContent = c[lk];
+  [['kannees_v','kannees_l'],['kchantiers_v','kchantiers_l'],['ksatis_v','ksatis_l'],['kartisans_v','kartisans_l']].forEach(([vk,lk],i) => {
+    const el = chiffres[i]; if(!el) return;
+    const n = el.querySelector('.chiffre-num'); if(n && c[vk]) n.textContent = c[vk];
+    const l = el.querySelector('.chiffre-label'); if(l && c[lk]) l.textContent = c[lk];
   });
 
-  // ── Services
+  // Services
   const cards = document.querySelectorAll('.service-card');
-  [1,2,3,4,5,6].forEach((i, idx) => {
-    const card = cards[idx]; if (!card) return;
-    const icon = card.querySelector('.service-icon');
-    const nom  = card.querySelector('.service-name');
-    const desc = card.querySelector('.service-desc');
-    if (icon && c['s'+i+'_icon']) icon.textContent = c['s'+i+'_icon'];
-    if (nom  && c['s'+i+'_nom'])  nom.textContent  = c['s'+i+'_nom'];
-    if (desc && c['s'+i+'_desc']) desc.textContent = c['s'+i+'_desc'];
+  [1,2,3,4,5,6].forEach((i,idx) => {
+    const card = cards[idx]; if(!card) return;
+    const icon = card.querySelector('.service-icon'); if(icon && c['s'+i+'_icon']) icon.textContent = c['s'+i+'_icon'];
+    const nom  = card.querySelector('.service-name');  if(nom  && c['s'+i+'_nom'])  nom.textContent  = c['s'+i+'_nom'];
+    const desc = card.querySelector('.service-desc');  if(desc && c['s'+i+'_desc']) desc.textContent = c['s'+i+'_desc'];
   });
 
-  // ── Contact
-  const infoItems = document.querySelectorAll('.info-item');
-  infoItems.forEach(item => {
+  // Contact
+  document.querySelectorAll('.info-item').forEach(item => {
     const icon = item.querySelector('.info-icon');
     const val  = item.querySelector('.info-value');
     if (!icon || !val) return;
-    if (icon.textContent.includes('📍') && c.adresse)   val.innerHTML = c.adresse;
-    if (icon.textContent.includes('📞') && c.telephone) val.textContent = c.telephone;
-    if (icon.textContent.includes('✉️') && c.email)     val.textContent = c.email;
-    if (icon.textContent.includes('⏰') && c.horaires)  val.innerHTML = c.horaires;
+    const t = icon.textContent;
+    if (t.includes('📍') && c.adresse)   val.innerHTML  = c.adresse;
+    if (t.includes('📞') && c.telephone) val.textContent = c.telephone;
+    if (t.includes('✉️') && c.email)     val.textContent = c.email;
+    if (t.includes('⏰') && c.horaires)  val.innerHTML  = c.horaires;
   });
 
-  // ── Footer nom entreprise
-  const footerBrand = document.querySelector('.footer-brand .nav-logo');
-  if (footerBrand && c.nom_entreprise) footerBrand.innerHTML = c.nom_entreprise;
-
-  // ── Title onglet
-  if (c.nom_entreprise) document.title = c.nom_entreprise + ' — Maçonnerie & Rénovation';
-
-  // Recalculer le devis avec les nouveaux tarifs
   calcDevis();
 }
 
-// ── Mettre à jour le select devis avec les labels Supabase
 function updateDevisSelect(rows) {
   const sel = document.getElementById('d-type');
   if (!sel || !rows.length) return;
-  sel.innerHTML = rows.map(r =>
-    `<option value="${r.type}">${r.label}</option>`
-  ).join('');
+  sel.innerHTML = rows.map(r => `<option value="${r.type}">${r.label}</option>`).join('');
 }
 
-// ── Remplacer la galerie avec les photos Supabase
 function updateGalerie(photos) {
   const gallery = document.querySelector('.gallery');
   if (!gallery || !photos.length) return;
-  gallery.innerHTML = photos.map((p, i) =>
+  gallery.innerHTML = photos.map((p,i) =>
     `<div class="gallery-item"${i===0?' style="grid-column:span 2"':''}>
       <img src="${p.photo_url}" alt="${p.legende||''}" loading="lazy">
       ${p.legende ? `<div class="gallery-caption">${p.legende}</div>` : ''}
     </div>`
   ).join('');
-  // Réactiver l'observer scroll pour les nouvelles images
   gallery.querySelectorAll('.gallery-item').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    el.style.opacity='0'; el.style.transform='translateY(20px)';
+    el.style.transition='opacity 0.5s ease, transform 0.5s ease';
     observer.observe(el);
   });
+}
+
+// ═══════════════════════════════════════════════════════
+// CHARGEMENT SUPABASE
+// ═══════════════════════════════════════════════════════
+async function loadFromSupabase() {
+  try {
+    const H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
+
+    // 1. Récupérer les modules actifs du client
+    const clientRes = await fetch(
+      SB_URL + '/rest/v1/clients_sites?slug=eq.' + CLIENT_SLUG + '&select=modules',
+      { headers: H }
+    );
+    if (clientRes.ok) {
+      const rows = await clientRes.json();
+      if (rows.length > 0 && rows[0].modules) {
+        activeModules = rows[0].modules;
+        applyModules(); // ← appliquer tout de suite les modules
+      }
+    }
+
+    // 2. Textes (seulement si module textes actif)
+    if (activeModules.includes('textes')) {
+      const cfgRes = await fetch(
+        SB_URL + '/rest/v1/site_config?client_slug=eq.' + CLIENT_SLUG + '&select=cle,valeur',
+        { headers: H }
+      );
+      if (cfgRes.ok) {
+        const rows = await cfgRes.json();
+        rows.forEach(r => { siteConfig[r.cle] = r.valeur; });
+        applyConfig();
+      }
+    }
+
+    // 3. Galerie (seulement si module galerie actif)
+    if (activeModules.includes('galerie')) {
+      const galRes = await fetch(
+        SB_URL + '/rest/v1/site_galerie?client_slug=eq.' + CLIENT_SLUG + '&order=ordre.asc&select=photo_url,legende',
+        { headers: H }
+      );
+      if (galRes.ok) {
+        const photos = await galRes.json();
+        if (photos.length > 0) updateGalerie(photos);
+      }
+    }
+
+    // 4. Devis (seulement si module devis actif)
+    if (activeModules.includes('devis')) {
+      const devisRes = await fetch(
+        SB_URL + '/rest/v1/site_devis_config?client_slug=eq.' + CLIENT_SLUG + '&actif=eq.true&select=type,label,tarif_base',
+        { headers: H }
+      );
+      if (devisRes.ok) {
+        const rows = await devisRes.json();
+        if (rows.length > 0) {
+          tarifBase = {};
+          rows.forEach(r => { tarifBase[r.type] = parseFloat(r.tarif_base) || TARIF_BASE_DEFAULT[r.type]; });
+          updateDevisSelect(rows);
+          calcDevis();
+        }
+      }
+    }
+
+  } catch(e) {
+    console.warn('Supabase indisponible — valeurs par défaut conservées.', e);
+  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1065,13 +1082,11 @@ let optionsTotal = 0;
 function toggleOption(btn) {
   btn.classList.toggle('active');
   optionsTotal = [...document.querySelectorAll('.option-btn.active')]
-    .reduce((s, b) => s + parseInt(b.dataset.val), 0);
+    .reduce((s,b) => s + parseInt(b.dataset.val), 0);
   calcDevis();
 }
 
-function fmt(n) {
-  return Math.round(n).toLocaleString('fr-FR') + ' €';
-}
+function fmt(n) { return Math.round(n).toLocaleString('fr-FR') + ' \u20ac'; }
 
 function calcDevis() {
   const typeEl    = document.getElementById('d-type');
@@ -1085,20 +1100,20 @@ function calcDevis() {
   const finition= finEl.value;
   const delai   = parseFloat(delaiEl.value);
 
-  const base   = tarifBase[type] || TARIF_BASE_DEFAULT[type] || 65;
-  const tarif  = base * COEF_FINITION[finition] * delai;
-  const mdo    = tarif * 0.6 * surface;
-  const mat    = tarif * 0.32 * surface;
-  const dep    = 300;
-  const total  = mdo + mat + dep + optionsTotal;
+  const base  = tarifBase[type] || TARIF_BASE_DEFAULT[type] || 65;
+  const tarif = base * COEF_FINITION[finition] * delai;
+  const mdo   = tarif * 0.6 * surface;
+  const mat   = tarif * 0.32 * surface;
+  const dep   = 300;
+  const total = mdo + mat + dep + optionsTotal;
 
-  document.getElementById('res-price').textContent  = fmt(total);
-  document.getElementById('res-range').textContent  = `Fourchette : ${fmt(total * 0.85)} – ${fmt(total * 1.15)}`;
-  document.getElementById('b-mdo').textContent      = fmt(mdo);
-  document.getElementById('b-mat').textContent      = fmt(mat);
-  document.getElementById('b-opt').textContent      = fmt(optionsTotal);
-  document.getElementById('b-dep').textContent      = fmt(dep);
-  document.getElementById('res-dispo').textContent  = DISPO_MAP[type] || '2–3 semaines';
+  document.getElementById('res-price').textContent = fmt(total);
+  document.getElementById('res-range').textContent = `Fourchette\u00a0: ${fmt(total*0.85)} \u2013 ${fmt(total*1.15)}`;
+  document.getElementById('b-mdo').textContent = fmt(mdo);
+  document.getElementById('b-mat').textContent = fmt(mat);
+  document.getElementById('b-opt').textContent = fmt(optionsTotal);
+  document.getElementById('b-dep').textContent = fmt(dep);
+  document.getElementById('res-dispo').textContent = DISPO_MAP[type] || '2\u20133 semaines';
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1106,9 +1121,8 @@ function calcDevis() {
 // ═══════════════════════════════════════════════════════
 function handleSubmit(e) {
   e.preventDefault();
-  const success = document.getElementById('form-success');
-  success.style.display = 'block';
-  e.target.querySelectorAll('input, textarea, select').forEach(el => el.disabled = true);
+  document.getElementById('form-success').style.display = 'block';
+  e.target.querySelectorAll('input,textarea,select').forEach(el => el.disabled = true);
   e.target.querySelector('.submit-btn').style.display = 'none';
 }
 
@@ -1132,10 +1146,11 @@ document.querySelectorAll('.service-card, .gallery-item, .chiffre-item').forEach
 });
 
 // ═══════════════════════════════════════════════════════
-// INIT — appliquer défauts immédiatement, puis Supabase
+// INIT
 // ═══════════════════════════════════════════════════════
-applyConfig();           // affichage immédiat (valeurs codées)
-loadFromSupabase();      // mise à jour depuis la DB (async)
+applyConfig();       // affichage immédiat avec valeurs par défaut
+applyModules();      // masquer les sections selon modules par défaut
+loadFromSupabase();  // puis mise à jour depuis Supabase (async)
 </script>
 </body>
 </html>
