@@ -1011,6 +1011,7 @@ function updateGalerie(photos) {
 // CHARGEMENT SUPABASE
 // ═══════════════════════════════════════════════════════
 async function loadFromSupabase() {
+  console.log('🔄 [Velops] Début chargement Supabase...');
   try {
     const H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
 
@@ -1021,13 +1022,20 @@ async function loadFromSupabase() {
     );
     if (clientRes.ok) {
       const rows = await clientRes.json();
+      console.log('📦 [Velops] Client trouvé:', rows);
       if (rows.length > 0 && rows[0].modules) {
         activeModules = rows[0].modules;
-        applyModules(); // ← appliquer tout de suite les modules
+        console.log('✅ [Velops] Modules actifs:', activeModules);
+        applyModules();
+      } else {
+        console.warn('⚠️ [Velops] Aucun client trouvé pour slug =', CLIENT_SLUG);
       }
+    } else {
+      console.error('❌ [Velops] Erreur fetch client:', clientRes.status, await clientRes.text());
     }
 
     // 2. Textes (seulement si module textes actif)
+    console.log('📝 [Velops] Module textes actif ?', activeModules.includes('textes'));
     if (activeModules.includes('textes')) {
       const cfgRes = await fetch(
         SB_URL + '/rest/v1/site_config?client_slug=eq.' + CLIENT_SLUG + '&select=cle,valeur',
@@ -1041,6 +1049,7 @@ async function loadFromSupabase() {
     }
 
     // 3. Galerie (seulement si module galerie actif)
+    console.log('🖼 [Velops] Module galerie actif ?', activeModules.includes('galerie'));
     if (activeModules.includes('galerie')) {
       const galRes = await fetch(
         SB_URL + '/rest/v1/site_galerie?client_slug=eq.' + CLIENT_SLUG + '&order=ordre.asc&select=photo_url,legende',
@@ -1053,6 +1062,7 @@ async function loadFromSupabase() {
     }
 
     // 4. Devis (seulement si module devis actif)
+    console.log('🧮 [Velops] Module devis actif ?', activeModules.includes('devis'));
     if (activeModules.includes('devis')) {
       const devisRes = await fetch(
         SB_URL + '/rest/v1/site_devis_config?client_slug=eq.' + CLIENT_SLUG + '&actif=eq.true&select=type,label,tarif_base',
@@ -1070,8 +1080,9 @@ async function loadFromSupabase() {
     }
 
   } catch(e) {
-    console.warn('Supabase indisponible — valeurs par défaut conservées.', e);
+    console.error('❌ [Velops] ERREUR Supabase:', e);
   }
+  console.log('✅ [Velops] loadFromSupabase() terminé. Modules actifs:', activeModules);
 }
 
 // ═══════════════════════════════════════════════════════
