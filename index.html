@@ -1,538 +1,189 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Déco & Vous — Maçonnerie & Rénovation</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title id="page-title">Maçonnerie Mainenor — Artisans depuis 15 ans</title>
+<meta name="description" content="Artisans maçons qualifiés en Île-de-France. Maçonnerie, rénovation, ravalement, carrelage."/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --stone: #2C2825;
-    --stone-mid: #5C524A;
-    --stone-light: #A89880;
-    --sand: #E8DDD0;
-    --cream: #F5F0EA;
-    --accent: #C8832A;
-    --accent-dark: #A0661A;
-    --white: #FDFAF7;
-  }
+:root{
+  --stone:#2C2825;--stone-mid:#5C524A;--stone-light:#A89880;
+  --sand:#E8DDD0;--cream:#F5F0EA;--accent:#C8832A;--accent-dark:#A0661A;
+  --white:#FDFAF7;--dark:#1A1714;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--stone);overflow-x:hidden}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 5vw;background:rgba(44,40,37,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(200,131,42,.3);transition:padding .3s}
+nav.scrolled{padding:.8rem 5vw}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:.9rem;letter-spacing:.04em;transition:color .2s}
+.nav-links a:hover{color:var(--accent)}
+.nav-cta{background:var(--accent)!important;color:var(--white)!important;padding:.5rem 1.2rem;border-radius:2px;font-weight:500}
+.nav-cta:hover{background:var(--accent-dark)!important}
 
-  html { scroll-behavior: smooth; }
+/* ── HERO ── */
+#hero{min-height:100vh;background:var(--stone);display:flex;align-items:center;padding:8rem 5vw 5rem;position:relative;overflow:hidden}
+#hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&q=70') center/cover no-repeat;opacity:.18}
+#hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(transparent,var(--stone))}
+.hero-inner{position:relative;z-index:1;max-width:700px}
+.hero-tag{font-size:.75rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;opacity:0;animation:fadeUp .6s .2s forwards}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(3rem,7vw,5.5rem);font-weight:900;line-height:1.05;color:var(--white);margin-bottom:1.5rem;opacity:0;animation:fadeUp .6s .4s forwards}
+.hero-title span{color:var(--accent)}
+.hero-sub{font-size:1.05rem;font-weight:300;color:rgba(255,255,255,.75);line-height:1.75;max-width:520px;margin-bottom:2.5rem;opacity:0;animation:fadeUp .6s .6s forwards}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeUp .6s .8s forwards}
+.btn-primary{background:var(--accent);color:var(--white);padding:.9rem 2rem;text-decoration:none;font-size:.88rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;border-radius:2px;transition:background .2s,transform .15s;display:inline-block}
+.btn-primary:hover{background:var(--accent-dark);transform:translateY(-2px)}
+.btn-outline{border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.8);padding:.9rem 2rem;text-decoration:none;font-size:.88rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;border-radius:2px;transition:border-color .2s,color .2s;display:inline-block}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.hero-scroll{position:absolute;bottom:2.5rem;left:5vw;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone-light);display:flex;align-items:center;gap:.8rem}
+.hero-scroll::after{content:'';width:40px;height:1px;background:var(--accent);animation:scrollLine 2s infinite}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--white);
-    color: var(--stone);
-    overflow-x: hidden;
-  }
+/* ── CHIFFRES ── */
+#chiffres{background:var(--accent);display:grid;grid-template-columns:repeat(4,1fr);padding:2.5rem 5vw}
+.chiffre-item{text-align:center;padding:1rem;border-right:1px solid rgba(255,255,255,.2)}
+.chiffre-item:last-child{border-right:none}
+.chiffre-num{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:var(--white);line-height:1}
+.chiffre-label{font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-top:.4rem}
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.2rem 5vw;
-    background: rgba(44,40,37,0.96);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(200,131,42,0.3);
-  }
+/* ── SECTIONS COMMUNES ── */
+.section{padding:6rem 5vw}
+.section-tag{font-size:.72rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;line-height:1.15;color:var(--stone);margin-bottom:1rem}
+.section-sub{font-size:1rem;font-weight:300;color:var(--stone-mid);line-height:1.75;max-width:540px;margin-bottom:3rem}
 
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem; font-weight: 900;
-    color: var(--white);
-    letter-spacing: -0.02em;
-  }
-  .nav-logo span { color: var(--accent); }
+/* ── SERVICES ── */
+#services{background:var(--cream)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--sand)}
+.service-card{background:var(--cream);padding:2.5rem 2rem;transition:background .2s}
+.service-card:hover{background:var(--white)}
+.service-icon{font-size:2rem;margin-bottom:1rem}
+.service-name{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--stone);margin-bottom:.6rem}
+.service-desc{font-size:.88rem;font-weight:300;color:var(--stone-mid);line-height:1.7}
 
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a {
-    color: var(--sand); text-decoration: none;
-    font-size: 0.9rem; font-weight: 500;
-    letter-spacing: 0.05em; text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--accent); }
+/* ── GALERIE ── */
+#realisations{background:var(--white)}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.gallery-item{overflow:hidden;position:relative;aspect-ratio:4/3;cursor:pointer}
+.gallery-item:first-child{grid-column:span 2;aspect-ratio:16/9}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.gallery-item:hover img{transform:scale(1.05)}
+.gallery-caption{position:absolute;bottom:0;left:0;right:0;padding:.8rem 1rem;background:linear-gradient(transparent,rgba(44,40,37,.85));color:var(--white);font-size:.8rem;letter-spacing:.05em;transform:translateY(100%);transition:transform .3s}
+.gallery-item:hover .gallery-caption{transform:translateY(0)}
 
-  .nav-cta {
-    background: var(--accent);
-    color: var(--white) !important;
-    padding: 0.55rem 1.4rem;
-    border-radius: 2px;
-  }
-  .nav-cta:hover { background: var(--accent-dark) !important; color: var(--white) !important; }
+/* ── SIMULATEUR ── */
+#simulateur{background:var(--stone)}
+#simulateur .section-title{color:var(--white)}
+#simulateur .section-sub{color:var(--stone-light)}
+#simulateur .section-tag{color:var(--accent)}
+.devis-wrapper{display:grid;grid-template-columns:1.1fr 1fr;gap:3rem;align-items:start}
+.devis-form{display:flex;flex-direction:column;gap:1.5rem}
+.form-group label{display:block;font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light);margin-bottom:.6rem}
+.form-group select,.form-group input[type=range]{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(168,152,128,.25);color:var(--white);padding:.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;border-radius:2px;outline:none;transition:border-color .2s;appearance:none}
+.form-group select:focus{border-color:var(--accent)}
+.form-group select option{background:var(--stone);color:var(--white)}
+.range-wrap{display:flex;flex-direction:column;gap:.6rem}
+.range-label-row{display:flex;justify-content:space-between;align-items:center}
+.range-value{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--accent)}
+input[type=range]{-webkit-appearance:none;height:3px;background:rgba(168,152,128,.2);border:none;padding:0;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer}
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.option-btn{background:transparent;border:1px solid rgba(168,152,128,.25);color:var(--stone-light);padding:.65rem .9rem;font-family:'DM Sans',sans-serif;font-size:.82rem;border-radius:2px;cursor:pointer;transition:all .2s;text-align:left}
+.option-btn.active{background:rgba(200,131,42,.15);border-color:var(--accent);color:var(--white)}
+.option-btn:hover{border-color:var(--accent);color:var(--white)}
+.devis-result{background:rgba(255,255,255,.05);border:1px solid rgba(200,131,42,.3);padding:2.5rem;border-radius:2px;position:sticky;top:100px}
+.result-title{font-size:.72rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--stone-light);margin-bottom:1.5rem}
+.result-price{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;color:var(--white);line-height:1;margin-bottom:.3rem}
+.result-range{font-size:.85rem;color:var(--stone-light);margin-bottom:2rem}
+.result-breakdown{display:flex;flex-direction:column;gap:.8rem;margin-bottom:2rem}
+.breakdown-row{display:flex;justify-content:space-between;font-size:.9rem;padding-bottom:.8rem;border-bottom:1px solid rgba(168,152,128,.15);color:var(--stone-light)}
+.breakdown-row span:last-child{color:var(--white);font-weight:500}
+.result-note{font-size:.8rem;color:rgba(168,152,128,.7);line-height:1.6;margin-bottom:1.5rem;font-style:italic}
+.urgency-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(200,131,42,.15);border:1px solid rgba(200,131,42,.4);color:var(--accent);font-size:.78rem;font-weight:500;letter-spacing:.05em;padding:.5rem 1rem;border-radius:20px;margin-bottom:1.5rem}
 
-  /* ── HERO ── */
-  #hero {
-    min-height: 100vh;
-    background:
-      linear-gradient(160deg, rgba(44,40,37,0.88) 0%, rgba(44,40,37,0.6) 50%, rgba(44,40,37,0.82) 100%),
-      url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&q=80') center/cover no-repeat;
-    display: flex; align-items: center;
-    padding: 0 5vw;
-    position: relative;
-  }
+/* ── CONTACT ── */
+#contact{background:var(--cream)}
+.contact-wrapper{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:2rem}
+.info-item{display:flex;gap:1rem;align-items:flex-start}
+.info-icon{width:44px;height:44px;border-radius:2px;background:var(--stone);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.info-label{font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light);margin-bottom:.3rem}
+.info-value{font-size:.95rem;font-weight:500;color:var(--stone)}
+.map-placeholder{background:var(--stone);height:200px;border-radius:2px;display:flex;align-items:center;justify-content:center;color:var(--stone-light);font-size:.85rem;letter-spacing:.05em;margin-top:1.5rem}
+.contact-form{display:flex;flex-direction:column;gap:1.2rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.cf-group{display:flex;flex-direction:column;gap:.4rem}
+.cf-group label{font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--stone-mid)}
+.cf-group input,.cf-group select,.cf-group textarea{background:var(--white);border:1px solid rgba(168,152,128,.35);color:var(--stone);padding:.85rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;border-radius:2px;outline:none;transition:border-color .2s;width:100%}
+.cf-group input:focus,.cf-group select:focus,.cf-group textarea:focus{border-color:var(--accent)}
+.cf-group textarea{resize:vertical;min-height:120px}
+.cf-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C8832A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;background-color:var(--white)}
+.submit-btn{background:var(--accent);color:var(--white);padding:1.1rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;transition:background .2s,transform .15s}
+.submit-btn:hover{background:var(--accent-dark);transform:translateY(-2px)}
+.form-success{display:none;background:rgba(200,131,42,.1);border:1px solid var(--accent);color:var(--stone);padding:1.2rem;border-radius:2px;font-size:.9rem;text-align:center}
 
-  .hero-inner { max-width: 700px; }
+/* ── FOOTER ── */
+footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:2rem;border-top:1px solid rgba(200,131,42,.2)}
+.footer-brand .nav-logo{font-size:1.8rem;display:block;margin-bottom:.8rem}
+.footer-brand p{font-size:.85rem;color:var(--stone-light);line-height:1.7;max-width:280px}
+.footer-col h4{font-size:.72rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--stone-light);margin-bottom:1rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.footer-col ul a{font-size:.9rem;color:rgba(168,152,128,.6);text-decoration:none;transition:color .2s}
+.footer-col ul a:hover{color:var(--accent)}
+.footer-bottom{background:var(--dark);padding:1.2rem 5vw;border-top:1px solid rgba(255,255,255,.06);text-align:center;font-size:.8rem;color:rgba(168,152,128,.5)}
+.footer-bottom a{color:var(--accent);text-decoration:none}
 
-  .hero-tag {
-    display: inline-block;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    font-size: 0.75rem; font-weight: 500;
-    letter-spacing: 0.15em; text-transform: uppercase;
-    padding: 0.4rem 1rem;
-    margin-bottom: 2rem;
-    animation: fadeUp 0.6s ease both;
-  }
+/* ── LOADING OVERLAY ── */
+#loading{position:fixed;inset:0;z-index:999;background:var(--stone);display:flex;align-items:center;justify-content:center;transition:opacity .4s}
+#loading.hidden{opacity:0;pointer-events:none}
+.loading-logo{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--white)}
+.loading-logo span{color:var(--accent)}
+.loading-bar{width:120px;height:2px;background:rgba(255,255,255,.1);margin:1rem auto 0;border-radius:2px;overflow:hidden}
+.loading-bar::after{content:'';display:block;height:100%;background:var(--accent);animation:loadBar .8s ease forwards}
+@keyframes loadBar{from{width:0}to{width:100%}}
 
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 7vw, 5.5rem);
-    font-weight: 900; line-height: 1.05;
-    color: var(--white);
-    margin-bottom: 1.5rem;
-    animation: fadeUp 0.7s 0.1s ease both;
-  }
-  .hero-title span { color: var(--accent); }
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scrollLine{0%,100%{opacity:1}50%{opacity:.3}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
 
-  .hero-sub {
-    font-size: 1.15rem; font-weight: 300;
-    color: var(--sand); line-height: 1.7;
-    max-width: 520px;
-    margin-bottom: 2.5rem;
-    animation: fadeUp 0.7s 0.2s ease both;
-  }
-
-  .hero-btns {
-    display: flex; gap: 1rem; flex-wrap: wrap;
-    animation: fadeUp 0.7s 0.3s ease both;
-  }
-
-  .btn-primary {
-    background: var(--accent);
-    color: var(--white);
-    padding: 1rem 2.2rem;
-    font-size: 0.9rem; font-weight: 500;
-    letter-spacing: 0.04em; text-transform: uppercase;
-    text-decoration: none; border: none; cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-    border-radius: 2px;
-    display: inline-block;
-  }
-  .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
-
-  .btn-outline {
-    border: 1px solid rgba(255,255,255,0.4);
-    color: var(--white);
-    padding: 1rem 2.2rem;
-    font-size: 0.9rem; font-weight: 500;
-    letter-spacing: 0.04em; text-transform: uppercase;
-    text-decoration: none; cursor: pointer;
-    transition: border-color 0.2s, transform 0.15s;
-    border-radius: 2px;
-    display: inline-block;
-    background: transparent;
-  }
-  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-
-  .hero-scroll {
-    position: absolute; bottom: 2.5rem; left: 50%;
-    transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    color: var(--stone-light); font-size: 0.75rem; letter-spacing: 0.1em;
-    animation: fadeUp 1s 0.8s ease both;
-  }
-  .hero-scroll::after {
-    content: '';
-    display: block; width: 1px; height: 40px;
-    background: linear-gradient(to bottom, var(--stone-light), transparent);
-    animation: scrollLine 1.5s ease-in-out infinite;
-  }
-
-  /* ── CHIFFRES ── */
-  #chiffres {
-    background: var(--stone);
-    padding: 3rem 5vw;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
-    gap: 2rem;
-  }
-  .chiffre-item { text-align: center; }
-  .chiffre-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem; font-weight: 900;
-    color: var(--accent);
-    line-height: 1;
-  }
-  .chiffre-label {
-    font-size: 0.85rem; font-weight: 400;
-    color: var(--stone-light); letter-spacing: 0.05em;
-    text-transform: uppercase; margin-top: 0.4rem;
-  }
-
-  /* ── SECTION GÉNÉRIQUE ── */
-  .section { padding: 6rem 5vw; }
-  .section-tag {
-    font-size: 0.75rem; font-weight: 500;
-    color: var(--accent); letter-spacing: 0.15em;
-    text-transform: uppercase; margin-bottom: 0.75rem;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 700; line-height: 1.15;
-    color: var(--stone); margin-bottom: 1rem;
-  }
-  .section-sub {
-    font-size: 1rem; font-weight: 300;
-    color: var(--stone-mid); line-height: 1.7;
-    max-width: 560px; margin-bottom: 3rem;
-  }
-
-  /* ── SERVICES ── */
-  #services { background: var(--cream); }
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-    gap: 1.5rem;
-  }
-  .service-card {
-    background: var(--white);
-    border: 1px solid rgba(168,152,128,0.2);
-    padding: 2.2rem;
-    transition: transform 0.25s, box-shadow 0.25s;
-    position: relative; overflow: hidden;
-    border-radius: 2px;
-  }
-  .service-card::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: var(--accent); transform: scaleX(0);
-    transform-origin: left; transition: transform 0.3s;
-  }
-  .service-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(44,40,37,0.12); }
-  .service-card:hover::before { transform: scaleX(1); }
-
-  .service-icon {
-    font-size: 2.2rem; margin-bottom: 1.2rem;
-  }
-  .service-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem; font-weight: 700;
-    color: var(--stone); margin-bottom: 0.7rem;
-  }
-  .service-desc {
-    font-size: 0.9rem; font-weight: 300;
-    color: var(--stone-mid); line-height: 1.7;
-  }
-
-  /* ── RÉALISATIONS ── */
-  #realisations { background: var(--white); }
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto;
-    gap: 1rem;
-  }
-  .gallery-item {
-    background: var(--sand);
-    overflow: hidden; position: relative;
-    aspect-ratio: 4/3; border-radius: 2px;
-    cursor: pointer;
-  }
-  .gallery-item:first-child { grid-column: span 2; aspect-ratio: 16/9; }
-  .gallery-item img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.5s;
-  }
-  .gallery-item:hover img { transform: scale(1.06); }
-  .gallery-caption {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    padding: 1.2rem; background: linear-gradient(transparent, rgba(44,40,37,0.85));
-    color: var(--white); font-size: 0.9rem; font-weight: 500;
-    transform: translateY(100%); transition: transform 0.3s;
-  }
-  .gallery-item:hover .gallery-caption { transform: translateY(0); }
-
-  /* ── SIMULATEUR ── */
-  #simulateur { background: var(--stone); }
-  #simulateur .section-title { color: var(--white); }
-  #simulateur .section-sub { color: var(--stone-light); }
-  #simulateur .section-tag { color: var(--accent); }
-
-  .devis-wrapper {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 3rem; align-items: start;
-  }
-
-  .devis-form { display: flex; flex-direction: column; gap: 1.5rem; }
-
-  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-  .form-group label {
-    font-size: 0.8rem; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--stone-light);
-  }
-  .form-group select,
-  .form-group input[type="range"] {
-    width: 100%;
-  }
-  .form-group select {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(168,152,128,0.3);
-    color: var(--white);
-    padding: 0.85rem 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    border-radius: 2px;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C8832A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 1rem center;
-    padding-right: 2.5rem;
-  }
-  .form-group select option { background: var(--stone); color: var(--white); }
-
-  .range-wrap { display: flex; flex-direction: column; gap: 0.5rem; }
-  .range-label-row { display: flex; justify-content: space-between; align-items: center; }
-  .range-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem; font-weight: 700; color: var(--accent);
-  }
-  input[type="range"] {
-    -webkit-appearance: none; height: 4px;
-    background: rgba(168,152,128,0.3);
-    border-radius: 2px; outline: none;
-  }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px; height: 20px;
-    border-radius: 50%; background: var(--accent);
-    cursor: pointer; transition: transform 0.2s;
-    box-shadow: 0 2px 8px rgba(200,131,42,0.4);
-  }
-  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-
-  .options-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
-  }
-  .option-btn {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(168,152,128,0.25);
-    color: var(--stone-light);
-    padding: 0.75rem 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem; font-weight: 500;
-    cursor: pointer; transition: all 0.2s;
-    border-radius: 2px; text-align: left;
-  }
-  .option-btn.active {
-    background: rgba(200,131,42,0.15);
-    border-color: var(--accent); color: var(--white);
-  }
-  .option-btn:hover { border-color: var(--accent); color: var(--white); }
-
-  /* Résultat devis */
-  .devis-result {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(200,131,42,0.3);
-    padding: 2.5rem;
-    border-radius: 2px;
-    position: sticky; top: 100px;
-  }
-  .result-title {
-    font-size: 0.75rem; font-weight: 500;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--stone-light); margin-bottom: 1.5rem;
-  }
-  .result-price {
-    font-family: 'Playfair Display', serif;
-    font-size: 3.5rem; font-weight: 900;
-    color: var(--white); line-height: 1;
-    margin-bottom: 0.3rem;
-  }
-  .result-range {
-    font-size: 0.85rem; color: var(--stone-light);
-    margin-bottom: 2rem;
-  }
-  .result-breakdown { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem; }
-  .breakdown-row {
-    display: flex; justify-content: space-between;
-    font-size: 0.9rem; padding-bottom: 0.8rem;
-    border-bottom: 1px solid rgba(168,152,128,0.15);
-    color: var(--stone-light);
-  }
-  .breakdown-row span:last-child { color: var(--white); font-weight: 500; }
-  .result-note {
-    font-size: 0.8rem; color: rgba(168,152,128,0.7);
-    line-height: 1.6; margin-bottom: 1.5rem;
-    font-style: italic;
-  }
-  .urgency-badge {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: rgba(200,131,42,0.15);
-    border: 1px solid rgba(200,131,42,0.4);
-    color: var(--accent);
-    font-size: 0.78rem; font-weight: 500;
-    letter-spacing: 0.05em;
-    padding: 0.5rem 1rem; border-radius: 20px;
-    margin-bottom: 1.5rem;
-  }
-
-  /* ── CONTACT ── */
-  #contact { background: var(--cream); }
-  .contact-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 4rem; align-items: start;
-  }
-  .contact-info { display: flex; flex-direction: column; gap: 2rem; }
-  .info-item { display: flex; gap: 1rem; align-items: flex-start; }
-  .info-icon {
-    width: 44px; height: 44px; border-radius: 2px;
-    background: var(--stone);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem; flex-shrink: 0;
-  }
-  .info-label {
-    font-size: 0.75rem; font-weight: 500;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--stone-light); margin-bottom: 0.3rem;
-  }
-  .info-value { font-size: 0.95rem; font-weight: 500; color: var(--stone); }
-
-  .map-placeholder {
-    background: var(--stone);
-    height: 200px; border-radius: 2px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--stone-light); font-size: 0.85rem;
-    letter-spacing: 0.05em; margin-top: 1.5rem;
-  }
-
-  /* Formulaire contact */
-  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .cf-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .cf-group label {
-    font-size: 0.78rem; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--stone-mid);
-  }
-  .cf-group input,
-  .cf-group select,
-  .cf-group textarea {
-    background: var(--white);
-    border: 1px solid rgba(168,152,128,0.35);
-    color: var(--stone);
-    padding: 0.85rem 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    border-radius: 2px;
-    outline: none;
-    transition: border-color 0.2s;
-    width: 100%;
-  }
-  .cf-group input:focus,
-  .cf-group select:focus,
-  .cf-group textarea:focus { border-color: var(--accent); }
-  .cf-group textarea { resize: vertical; min-height: 120px; }
-  .cf-group select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C8832A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 1rem center;
-    background-color: var(--white);
-  }
-  .submit-btn {
-    background: var(--accent);
-    color: var(--white);
-    padding: 1.1rem;
-    border: none; cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    border-radius: 2px;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .submit-btn:hover { background: var(--accent-dark); transform: translateY(-2px); }
-
-  .form-success {
-    display: none;
-    background: rgba(200,131,42,0.1);
-    border: 1px solid var(--accent);
-    color: var(--stone);
-    padding: 1.2rem;
-    border-radius: 2px;
-    font-size: 0.9rem; text-align: center;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    background: #1A1714;
-    padding: 3rem 5vw;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 2rem;
-    border-top: 1px solid rgba(200,131,42,0.2);
-  }
-  .footer-brand .nav-logo { font-size: 1.8rem; display: block; margin-bottom: 0.8rem; }
-  .footer-brand p {
-    font-size: 0.85rem; color: var(--stone-light);
-    line-height: 1.7; max-width: 280px;
-  }
-  .footer-col h4 {
-    font-size: 0.75rem; font-weight: 500;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--stone-light); margin-bottom: 1rem;
-  }
-  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
-  .footer-col ul a {
-    font-size: 0.9rem; color: rgba(168,152,128,0.6);
-    text-decoration: none; transition: color 0.2s;
-  }
-  .footer-col ul a:hover { color: var(--accent); }
-  .footer-bottom {
-    background: #1A1714;
-    padding: 1.2rem 5vw;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    text-align: center;
-    font-size: 0.8rem; color: rgba(168,152,128,0.5);
-  }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes scrollLine {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .gallery { grid-template-columns: 1fr 1fr; }
-    .gallery-item:first-child { grid-column: span 2; }
-    .devis-wrapper { grid-template-columns: 1fr; }
-    .contact-wrapper { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    footer { grid-template-columns: 1fr; }
-    .devis-result { position: static; }
-  }
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .nav-links{display:none}
+  #chiffres{grid-template-columns:1fr 1fr}
+  .services-grid{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr 1fr}
+  .gallery-item:first-child{grid-column:span 2}
+  .devis-wrapper,.contact-wrapper,.form-row{grid-template-columns:1fr}
+  footer{grid-template-columns:1fr}
+  .devis-result{position:static}
+  .options-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
+<!-- LOADING -->
+<div id="loading">
+  <div style="text-align:center">
+    <div class="loading-logo" id="loading-nom">Maçonnerie <span>Mainenor</span></div>
+    <div class="loading-bar"></div>
+  </div>
+</div>
+
 <!-- NAV -->
-<nav>
-  <div class="nav-logo">Déco <span>&</span> Vous</div>
-  <ul class="nav-links">
+<nav id="nav">
+  <a href="#hero" class="nav-logo" id="nav-logo">Maçonnerie <span>Mainenor</span></a>
+  <ul class="nav-links" id="nav-links">
     <li><a href="#services">Services</a></li>
-    <li><a href="#realisations">Réalisations</a></li>
-    <li><a href="#simulateur">Devis</a></li>
+    <li id="nav-li-galerie"><a href="#realisations">Réalisations</a></li>
+    <li id="nav-li-devis"><a href="#simulateur">Devis</a></li>
     <li><a href="#contact" class="nav-cta">Contact</a></li>
   </ul>
 </nav>
@@ -540,12 +191,12 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-inner">
-    <div class="hero-tag">Maçonnerie & Rénovation — Région Parisienne</div>
-    <h1 class="hero-title">L'artisanat<br>au <span>service</span><br>de vos projets</h1>
-    <p class="hero-sub">Depuis 15 ans, Déco & Vous transforme vos espaces avec précision et passion. Construction, rénovation, ravalement — nous réalisons votre vision.</p>
+    <div class="hero-tag" id="hero-tag">Maçonnerie &amp; Rénovation — Région Parisienne</div>
+    <h1 class="hero-title" id="hero-title">L'artisanat<br>au <span>service</span><br>de vos projets</h1>
+    <p class="hero-sub" id="hero-sub">Depuis 15 ans, Maçonnerie Mainenor transforme vos espaces avec précision et passion. Construction, rénovation, ravalement — nous réalisons votre vision.</p>
     <div class="hero-btns">
-      <a href="#simulateur" class="btn-primary">Estimer mon projet</a>
-      <a href="#realisations" class="btn-outline">Voir nos réalisations</a>
+      <a href="#simulateur" class="btn-primary" id="cta-devis">Estimer mon projet</a>
+      <a href="#realisations" class="btn-outline" id="cta-galerie">Voir nos réalisations</a>
     </div>
   </div>
   <div class="hero-scroll">Découvrir</div>
@@ -553,21 +204,21 @@
 
 <!-- CHIFFRES -->
 <section id="chiffres">
-  <div class="chiffre-item">
-    <div class="chiffre-num">15+</div>
-    <div class="chiffre-label">Années d'expérience</div>
+  <div class="chiffre-item reveal">
+    <div class="chiffre-num" id="k-annees-v">15+</div>
+    <div class="chiffre-label" id="k-annees-l">Années d'expérience</div>
   </div>
-  <div class="chiffre-item">
-    <div class="chiffre-num">480</div>
-    <div class="chiffre-label">Chantiers réalisés</div>
+  <div class="chiffre-item reveal">
+    <div class="chiffre-num" id="k-chantiers-v">480</div>
+    <div class="chiffre-label" id="k-chantiers-l">Chantiers réalisés</div>
   </div>
-  <div class="chiffre-item">
-    <div class="chiffre-num">98%</div>
-    <div class="chiffre-label">Clients satisfaits</div>
+  <div class="chiffre-item reveal">
+    <div class="chiffre-num" id="k-satis-v">98%</div>
+    <div class="chiffre-label" id="k-satis-l">Clients satisfaits</div>
   </div>
-  <div class="chiffre-item">
-    <div class="chiffre-num">12</div>
-    <div class="chiffre-label">Artisans qualifiés</div>
+  <div class="chiffre-item reveal">
+    <div class="chiffre-num" id="k-artisans-v">12</div>
+    <div class="chiffre-label" id="k-artisans-l">Artisans qualifiés</div>
   </div>
 </section>
 
@@ -576,82 +227,38 @@
   <div class="section-tag">Ce que nous faisons</div>
   <h2 class="section-title">Nos domaines<br>d'expertise</h2>
   <p class="section-sub">De la fondation à la finition, nous intervenons sur tous les corps de métier liés à la maçonnerie et à la rénovation.</p>
-  <div class="services-grid">
-    <div class="service-card">
-      <div class="service-icon">🧱</div>
-      <div class="service-name">Maçonnerie Générale</div>
-      <p class="service-desc">Construction de murs, cloisons, dalles, fondations et structures en béton armé. Travail soigné, matériaux certifiés.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🏗️</div>
-      <div class="service-name">Rénovation Complète</div>
-      <p class="service-desc">Réhabilitation de logements anciens, extension, surélévation. On prend en charge l'ensemble du projet.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🪨</div>
-      <div class="service-name">Ravalement de Façade</div>
-      <p class="service-desc">Nettoyage, enduit, peinture extérieure. Redonner vie à votre façade tout en la protégeant durablement.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🔩</div>
-      <div class="service-name">Carrelage & Chape</div>
-      <p class="service-desc">Pose de carrelage, parquet, chape liquide ou traditionnelle. Finitions précises pour un résultat parfait.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🏠</div>
-      <div class="service-name">Terrassement</div>
-      <p class="service-desc">Terrassement, nivellement, création d'allées, escaliers extérieurs et aménagements paysagers en dur.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🛠️</div>
-      <div class="service-name">Petits Travaux</div>
-      <p class="service-desc">Réparations, reprises en sous-œuvre, colmatage de fissures, imperméabilisation — intervention rapide.</p>
-    </div>
+  <div class="services-grid" id="services-grid">
+    <div class="service-card reveal"><div class="service-icon" id="s1-icon">🧱</div><div class="service-name" id="s1-nom">Maçonnerie Générale</div><p class="service-desc" id="s1-desc">Construction de murs, cloisons, dalles, fondations et structures en béton armé. Travail soigné, matériaux certifiés.</p></div>
+    <div class="service-card reveal"><div class="service-icon" id="s2-icon">🏗️</div><div class="service-name" id="s2-nom">Rénovation Complète</div><p class="service-desc" id="s2-desc">Réhabilitation de logements anciens, extension, surélévation. On prend en charge l'ensemble du projet.</p></div>
+    <div class="service-card reveal"><div class="service-icon" id="s3-icon">🪨</div><div class="service-name" id="s3-nom">Ravalement de Façade</div><p class="service-desc" id="s3-desc">Nettoyage, enduit, peinture extérieure. Redonner vie à votre façade tout en la protégeant durablement.</p></div>
+    <div class="service-card reveal"><div class="service-icon" id="s4-icon">🔩</div><div class="service-name" id="s4-nom">Carrelage &amp; Chape</div><p class="service-desc" id="s4-desc">Pose de carrelage, parquet, chape liquide ou traditionnelle. Finitions précises pour un résultat parfait.</p></div>
+    <div class="service-card reveal"><div class="service-icon" id="s5-icon">🏠</div><div class="service-name" id="s5-nom">Terrassement</div><p class="service-desc" id="s5-desc">Terrassement, nivellement, création d'allées, escaliers extérieurs et aménagements paysagers en dur.</p></div>
+    <div class="service-card reveal"><div class="service-icon" id="s6-icon">🛠️</div><div class="service-name" id="s6-nom">Petits Travaux</div><p class="service-desc" id="s6-desc">Réparations, reprises en sous-œuvre, colmatage de fissures, imperméabilisation — intervention rapide.</p></div>
   </div>
 </section>
 
-<!-- RÉALISATIONS -->
+<!-- GALERIE -->
 <section id="realisations" class="section">
   <div class="section-tag">Portfolio</div>
   <h2 class="section-title">Nos dernières<br>réalisations</h2>
   <p class="section-sub">Chaque chantier est une référence. Voici quelques-uns de nos projets récents.</p>
-  <div class="gallery">
-    <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=80" alt="Extension maison">
-      <div class="gallery-caption">Extension maison — Versailles, 2024</div>
-    </div>
-    <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Ravalement">
-      <div class="gallery-caption">Ravalement façade — Paris 15e</div>
-    </div>
-    <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80" alt="Chantier">
-      <div class="gallery-caption">Construction neuve — Boulogne</div>
-    </div>
-    <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" alt="Intérieur rénové">
-      <div class="gallery-caption">Rénovation intérieure — Neuilly</div>
-    </div>
-    <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80" alt="Extérieur">
-      <div class="gallery-caption">Aménagement terrasse — Clamart</div>
-    </div>
-    <div class="gallery-item">
-      <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" alt="Résidentiel">
-      <div class="gallery-caption">Villa neuve — Saint-Cloud</div>
-    </div>
+  <div class="gallery" id="gallery">
+    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=80" alt="Extension maison" loading="lazy"><div class="gallery-caption">Extension maison — Versailles, 2024</div></div>
+    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Ravalement" loading="lazy"><div class="gallery-caption">Ravalement façade — Paris 15e</div></div>
+    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80" alt="Chantier" loading="lazy"><div class="gallery-caption">Construction neuve — Boulogne</div></div>
+    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" alt="Intérieur" loading="lazy"><div class="gallery-caption">Rénovation intérieure — Neuilly</div></div>
+    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80" alt="Extérieur" loading="lazy"><div class="gallery-caption">Aménagement terrasse — Clamart</div></div>
+    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" alt="Villa" loading="lazy"><div class="gallery-caption">Villa neuve — Saint-Cloud</div></div>
   </div>
 </section>
 
-<!-- SIMULATEUR DE DEVIS -->
+<!-- SIMULATEUR -->
 <section id="simulateur" class="section">
   <div class="section-tag">Outil gratuit</div>
-  <h2 class="section-title" style="color:var(--white)">Simulateur<br>de devis intelligent</h2>
+  <h2 class="section-title">Simulateur<br>de devis intelligent</h2>
   <p class="section-sub">Obtenez une estimation immédiate en quelques clics. Sans engagement, sans attente.</p>
-
   <div class="devis-wrapper">
     <div class="devis-form">
-
       <div class="form-group">
         <label>Type de travaux</label>
         <select id="d-type" onchange="calcDevis()">
@@ -663,18 +270,16 @@
           <option value="petits">Petits travaux</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Surface concernée</label>
         <div class="range-wrap">
           <div class="range-label-row">
-            <span style="color:var(--stone-light);font-size:0.85rem">Surface</span>
+            <span style="color:var(--stone-light);font-size:.85rem">Surface</span>
             <span class="range-value" id="surface-val">50 m²</span>
           </div>
           <input type="range" id="d-surface" min="10" max="500" value="50" step="5" oninput="document.getElementById('surface-val').textContent=this.value+' m²';calcDevis()">
         </div>
       </div>
-
       <div class="form-group">
         <label>Niveau de finition</label>
         <select id="d-finition" onchange="calcDevis()">
@@ -683,10 +288,9 @@
           <option value="premium">Premium</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Options supplémentaires</label>
-        <div class="options-grid">
+        <div class="options-grid" id="options-grid">
           <button class="option-btn" data-val="150" onclick="toggleOption(this)">🏗️ Démolition préalable</button>
           <button class="option-btn" data-val="200" onclick="toggleOption(this)">🚛 Évacuation gravats</button>
           <button class="option-btn" data-val="300" onclick="toggleOption(this)">🔌 Réservations électro</button>
@@ -695,7 +299,6 @@
           <button class="option-btn" data-val="180" onclick="toggleOption(this)">⚡ Intervention urgente</button>
         </div>
       </div>
-
       <div class="form-group">
         <label>Délai souhaité</label>
         <select id="d-delai" onchange="calcDevis()">
@@ -705,24 +308,19 @@
           <option value="1.35">Urgent (moins de 2 semaines)</option>
         </select>
       </div>
-
     </div>
-
-    <!-- Résultat -->
     <div class="devis-result">
       <div class="result-title">Estimation de votre projet</div>
       <div class="result-price" id="res-price">3 750 €</div>
       <div class="result-range" id="res-range">Fourchette : 3 200 € – 4 300 €</div>
       <div class="urgency-badge">📅 Disponibilité sous <span id="res-dispo">3 semaines</span></div>
-
       <div class="result-breakdown" id="res-breakdown">
         <div class="breakdown-row"><span>Main d'œuvre</span><span id="b-mdo">2 250 €</span></div>
         <div class="breakdown-row"><span>Matériaux</span><span id="b-mat">1 200 €</span></div>
         <div class="breakdown-row"><span>Options</span><span id="b-opt">0 €</span></div>
         <div class="breakdown-row"><span>Déplacement</span><span id="b-dep">300 €</span></div>
       </div>
-
-      <p class="result-note">* Estimation indicative hors taxe. Un devis précis et gratuit est établi après visite technique sur site.</p>
+      <p class="result-note">* Estimation indicative hors taxe. Un devis précis et gratuit est établi après visite technique.</p>
       <a href="#contact" class="btn-primary" style="width:100%;text-align:center;display:block">Demander un devis gratuit →</a>
     </div>
   </div>
@@ -732,92 +330,51 @@
 <section id="contact" class="section">
   <div class="section-tag">Nous joindre</div>
   <h2 class="section-title">Parlons de<br>votre projet</h2>
-
   <div class="contact-wrapper">
     <div class="contact-info">
       <div class="info-item">
         <div class="info-icon">📍</div>
-        <div>
-          <div class="info-label">Adresse</div>
-          <div class="info-value">12 rue des Artisans<br>75015 Paris</div>
-        </div>
+        <div><div class="info-label">Adresse</div><div class="info-value" id="c-adresse">Paris, Île-de-France</div></div>
       </div>
       <div class="info-item">
         <div class="info-icon">📞</div>
-        <div>
-          <div class="info-label">Téléphone</div>
-          <div class="info-value">01 23 45 67 89</div>
-        </div>
+        <div><div class="info-label">Téléphone</div><div class="info-value" id="c-tel">01 23 45 67 89</div></div>
       </div>
       <div class="info-item">
         <div class="info-icon">✉️</div>
-        <div>
-          <div class="info-label">Email</div>
-          <div class="info-value">contact@deco-et-vous.fr</div>
-        </div>
+        <div><div class="info-label">Email</div><div class="info-value" id="c-email">contact@mainenor.fr</div></div>
       </div>
       <div class="info-item">
         <div class="info-icon">⏰</div>
-        <div>
-          <div class="info-label">Horaires</div>
-          <div class="info-value">Lun–Ven : 8h–18h<br>Sam : 9h–13h</div>
-        </div>
+        <div><div class="info-label">Horaires</div><div class="info-value" id="c-horaires">Lun–Ven : 8h–18h<br>Sam : 9h–13h</div></div>
       </div>
-      <div class="map-placeholder">
-        📍 Carte Google Maps intégrée ici
-      </div>
+      <div class="map-placeholder">📍 Carte Google Maps</div>
     </div>
-
     <div>
       <form class="contact-form" onsubmit="handleSubmit(event)">
         <div class="form-row">
-          <div class="cf-group">
-            <label>Prénom *</label>
-            <input type="text" placeholder="Jean" required>
-          </div>
-          <div class="cf-group">
-            <label>Nom *</label>
-            <input type="text" placeholder="Dupont" required>
-          </div>
+          <div class="cf-group"><label>Prénom *</label><input type="text" placeholder="Jean" required></div>
+          <div class="cf-group"><label>Nom *</label><input type="text" placeholder="Dupont" required></div>
         </div>
         <div class="form-row">
-          <div class="cf-group">
-            <label>Email *</label>
-            <input type="email" placeholder="jean@email.com" required>
-          </div>
-          <div class="cf-group">
-            <label>Téléphone</label>
-            <input type="tel" placeholder="06 XX XX XX XX">
-          </div>
+          <div class="cf-group"><label>Email *</label><input type="email" placeholder="jean@email.com" required></div>
+          <div class="cf-group"><label>Téléphone</label><input type="tel" placeholder="06 XX XX XX XX"></div>
         </div>
         <div class="cf-group">
           <label>Type de projet</label>
           <select>
-            <option>Maçonnerie générale</option>
-            <option>Rénovation complète</option>
-            <option>Ravalement de façade</option>
-            <option>Carrelage / Chape</option>
-            <option>Terrassement</option>
-            <option>Autre</option>
+            <option>Maçonnerie générale</option><option>Rénovation complète</option>
+            <option>Ravalement de façade</option><option>Carrelage / Chape</option>
+            <option>Terrassement</option><option>Autre</option>
           </select>
         </div>
-        <div class="cf-group">
-          <label>Votre message *</label>
-          <textarea placeholder="Décrivez votre projet : surface, type de travaux, contraintes particulières..." required></textarea>
-        </div>
+        <div class="cf-group"><label>Votre message *</label><textarea placeholder="Décrivez votre projet..." required></textarea></div>
         <div class="cf-group">
           <label>Comment nous avez-vous connus ?</label>
-          <select>
-            <option>Bouche à oreille</option>
-            <option>Google</option>
-            <option>Réseaux sociaux</option>
-            <option>Autre</option>
-          </select>
+          <select><option>Bouche à oreille</option><option>Google</option><option>Réseaux sociaux</option><option>Autre</option></select>
         </div>
         <button type="submit" class="submit-btn">Envoyer ma demande →</button>
-        <div class="form-success" id="form-success">
-          ✅ Merci ! Nous vous répondons sous 24h ouvrées.
-        </div>
+        <div class="form-success" id="form-success">✅ Merci ! Nous vous répondons sous 24h ouvrées.</div>
       </form>
     </div>
   </div>
@@ -826,17 +383,17 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">
-    <span class="nav-logo">Déco <span style="color:var(--accent)">&</span> Vous</span>
-    <p>Artisans maçons qualifiés depuis 2009. Nous construisons avec sérieux, nous rénovons avec passion.</p>
+    <a href="#hero" class="nav-logo" id="footer-logo">Maçonnerie <span>Mainenor</span></a>
+    <p id="footer-desc">Artisans maçons qualifiés depuis 2009. Nous construisons avec sérieux, nous rénovons avec passion.</p>
   </div>
   <div class="footer-col">
     <h4>Services</h4>
     <ul>
-      <li><a href="#">Maçonnerie générale</a></li>
-      <li><a href="#">Rénovation</a></li>
-      <li><a href="#">Ravalement</a></li>
-      <li><a href="#">Carrelage</a></li>
-      <li><a href="#">Terrassement</a></li>
+      <li><a href="#services">Maçonnerie générale</a></li>
+      <li><a href="#services">Rénovation</a></li>
+      <li><a href="#services">Ravalement</a></li>
+      <li><a href="#services">Carrelage</a></li>
+      <li><a href="#services">Terrassement</a></li>
     </ul>
   </div>
   <div class="footer-col">
@@ -844,260 +401,195 @@
     <ul>
       <li><a href="#">Mentions légales</a></li>
       <li><a href="#">Politique de confidentialité</a></li>
-      <li><a href="#">RGPD</a></li>
       <li><a href="#">Nos certifications</a></li>
     </ul>
   </div>
 </footer>
 <div class="footer-bottom">
-  © 2025 Déco & Vous — Tous droits réservés · Site réalisé par Velops
+  © 2025 <span id="footer-nom">Maçonnerie Mainenor</span> — Tous droits réservés · Site réalisé par <a href="https://velops.fr" target="_blank">Velops</a>
 </div>
 
 <script>
 // ═══════════════════════════════════════════════════════
-// CONFIG SUPABASE
+// CONFIG
 // ═══════════════════════════════════════════════════════
-const SB_URL     = 'https://gcxwbgsdblbachjgheqq.supabase.co';
-const SB_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjeHdiZ3NkYmxiYWNoamdoZXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjIxNTEsImV4cCI6MjA4ODgzODE1MX0.awOma2ufFoEa7LjxWZe6SgR7TOGbM_D9kY-wmLB0ZG8';
+const SB_URL      = 'https://gcxwbgsdblbachjgheqq.supabase.co';
+const SB_KEY      = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjeHdiZ3NkYmxiYWNoamdoZXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjIxNTEsImV4cCI6MjA4ODgzODE1MX0.awOma2ufFoEa7LjxWZe6SgR7TOGbM_D9kY-wmLB0ZG8';
 const CLIENT_SLUG = 'mainenor';
+const SB_H        = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
+
+// Tarifs & maps par défaut
+let tarifBase = { maconnerie:65, renovation:85, ravalement:45, carrelage:55, terrassement:40, petits:70 };
+const COEF    = { standard:1, moyen:1.35, premium:1.75 };
+const DISPO   = { maconnerie:'3 semaines', renovation:'6 semaines', ravalement:'2 semaines', carrelage:'2 semaines', terrassement:'1 semaine', petits:'48h' };
+let optionsTotal = 0;
 
 // ═══════════════════════════════════════════════════════
-// VALEURS PAR DÉFAUT (fallback)
+// INIT — chargement Supabase
 // ═══════════════════════════════════════════════════════
-const DEFAULTS = {
-  hero_titre:   "L'artisanat<br>au <span>service</span><br>de vos projets",
-  hero_sub:     "Depuis 15 ans, Maçonnerie Mainenor transforme vos espaces avec précision et passion.",
-  hero_tag:     "Maçonnerie & Rénovation — Région Parisienne",
-  kannees_v: "15+",  kannees_l: "Années d'expérience",
-  kchantiers_v: "480", kchantiers_l: "Chantiers réalisés",
-  ksatis_v: "98%",   ksatis_l: "Clients satisfaits",
-  kartisans_v: "12", kartisans_l: "Artisans qualifiés",
-  s1_icon:"🧱", s1_nom:"Maçonnerie Générale",  s1_desc:"Construction de murs, cloisons, dalles, fondations et structures en béton armé.",
-  s2_icon:"🏗️", s2_nom:"Rénovation Complète",  s2_desc:"Réhabilitation de logements anciens, extension, surélévation.",
-  s3_icon:"🪨", s3_nom:"Ravalement de Façade",  s3_desc:"Nettoyage, enduit, peinture extérieure. Redonner vie à votre façade.",
-  s4_icon:"🔩", s4_nom:"Carrelage & Chape",     s4_desc:"Pose de carrelage, parquet, chape liquide ou traditionnelle.",
-  s5_icon:"🏠", s5_nom:"Terrassement",           s5_desc:"Terrassement, nivellement, création d'allées et escaliers extérieurs.",
-  s6_icon:"🛠️", s6_nom:"Petits Travaux",         s6_desc:"Réparations, reprises en sous-œuvre, colmatage de fissures.",
-  telephone: "01 23 45 67 89",
-  email:     "contact@mainenor.fr",
-  adresse:   "Paris, Île-de-France",
-  horaires:  "Lun–Ven : 8h–18h<br>Sam : 9h–13h",
-  nom_entreprise: "Maçonnerie Mainenor",
-};
+async function init() {
+  try {
+    // Tout en parallèle
+    const [clientRes, cfgRes, galRes, devisRes] = await Promise.all([
+      fetch(SB_URL + '/rest/v1/clients_sites?slug=eq.' + CLIENT_SLUG + '&select=modules,nom_entreprise', { headers: SB_H }),
+      fetch(SB_URL + '/rest/v1/site_config?client_slug=eq.'       + CLIENT_SLUG + '&select=cle,valeur', { headers: SB_H }),
+      fetch(SB_URL + '/rest/v1/site_galerie?client_slug=eq.'      + CLIENT_SLUG + '&order=ordre.asc&select=photo_url,legende', { headers: SB_H }),
+      fetch(SB_URL + '/rest/v1/site_devis_config?client_slug=eq.' + CLIENT_SLUG + '&actif=eq.true&select=type,label,tarif_base', { headers: SB_H }),
+    ]);
 
-const TARIF_BASE_DEFAULT = {
-  maconnerie:65, renovation:85, ravalement:45,
-  carrelage:55, terrassement:40, petits:70
-};
-const COEF_FINITION = { standard:1, moyen:1.35, premium:1.75 };
-const DISPO_MAP = {
-  maconnerie:'3 semaines', renovation:'6 semaines', ravalement:'2 semaines',
-  carrelage:'2 semaines', terrassement:'1 semaine', petits:'48h'
-};
+    // 1. Modules — quelles sections afficher
+    if (clientRes.ok) {
+      const [client] = await clientRes.json();
+      if (client) {
+        applyModules(client.modules || []);
+        if (client.nom_entreprise) applyNom(client.nom_entreprise);
+      }
+    }
 
-let tarifBase   = {...TARIF_BASE_DEFAULT};
-let siteConfig  = {...DEFAULTS};
-let activeModules = ['textes','galerie','devis']; // défaut : tout actif
+    // 2. Textes
+    if (cfgRes.ok) {
+      const rows = await cfgRes.json();
+      const cfg = {};
+      rows.forEach(r => cfg[r.cle] = r.valeur);
+      applyTextes(cfg);
+    }
 
-// ═══════════════════════════════════════════════════════
-// GESTION DES MODULES — afficher/masquer les sections
-// ═══════════════════════════════════════════════════════
-function applyModules() {
-  // Section galerie/réalisations — module "galerie"
-  const secGalerie = document.getElementById('realisations');
-  const navGalerie = document.querySelector('a[href="#realisations"]');
-  const hasGalerie = activeModules.includes('galerie');
-  if (secGalerie) secGalerie.style.display = hasGalerie ? '' : 'none';
-  if (navGalerie) navGalerie.parentElement.style.display = hasGalerie ? '' : 'none';
+    // 3. Galerie
+    if (galRes.ok) {
+      const photos = await galRes.json();
+      if (photos.length) applyGalerie(photos);
+    }
 
-  // Section simulateur — module "devis"
-  const secDevis = document.getElementById('simulateur');
-  const navDevis = document.querySelector('a[href="#simulateur"]');
-  const hasDevis = activeModules.includes('devis');
-  if (secDevis) secDevis.style.display = hasDevis ? '' : 'none';
-  if (navDevis) navDevis.parentElement.style.display = hasDevis ? '' : 'none';
+    // 4. Devis
+    if (devisRes.ok) {
+      const rows = await devisRes.json();
+      if (rows.length) applyDevis(rows);
+    }
 
-  // Hero CTA "Voir nos réalisations" — masquer si galerie off
-  const ctaGalerie = document.querySelector('a[href="#realisations"].btn-outline');
-  if (ctaGalerie) ctaGalerie.style.display = hasGalerie ? '' : 'none';
+  } catch(e) {
+    console.warn('Supabase indisponible — site affiché avec valeurs par défaut.', e);
+  }
 
-  // Hero CTA "Estimer mon projet" — masquer si devis off
-  const ctaDevis = document.querySelector('a[href="#simulateur"].btn-primary');
-  if (ctaDevis) ctaDevis.style.display = hasDevis ? '' : 'none';
-
-  // Section textes (services + chiffres) — module "textes"
-  // On laisse toujours visible (c'est le contenu de base du site)
-  // mais si désactivé on cache l'édition avancée (section services)
-  const hasTextes = activeModules.includes('textes');
-  const secServices = document.getElementById('services');
-  const secChiffres = document.getElementById('chiffres');
-  // Les services et chiffres restent visibles même sans module textes
-  // (valeurs codées en dur), mais sans module on n'a pas la synchro DB
-}
-
-// ═══════════════════════════════════════════════════════
-// APPLIQUER LA CONFIG AU DOM
-// ═══════════════════════════════════════════════════════
-function applyConfig() {
-  const c = siteConfig;
-
-  // Nom entreprise
-  document.querySelectorAll('.nav-logo').forEach(el => { if(c.nom_entreprise) el.innerHTML = c.nom_entreprise; });
-  if (c.nom_entreprise) document.title = c.nom_entreprise + ' — Maçonnerie & Rénovation';
-
-  // Hero
-  const heroTag = document.querySelector('.hero-tag');
-  if (heroTag && c.hero_tag) heroTag.textContent = c.hero_tag;
-  const heroTitle = document.querySelector('.hero-title');
-  if (heroTitle && c.hero_titre) heroTitle.innerHTML = c.hero_titre;
-  const heroSub = document.querySelector('.hero-sub');
-  if (heroSub && c.hero_sub) heroSub.textContent = c.hero_sub;
-
-  // Chiffres
-  const chiffres = document.querySelectorAll('.chiffre-item');
-  [['kannees_v','kannees_l'],['kchantiers_v','kchantiers_l'],['ksatis_v','ksatis_l'],['kartisans_v','kartisans_l']].forEach(([vk,lk],i) => {
-    const el = chiffres[i]; if(!el) return;
-    const n = el.querySelector('.chiffre-num'); if(n && c[vk]) n.textContent = c[vk];
-    const l = el.querySelector('.chiffre-label'); if(l && c[lk]) l.textContent = c[lk];
-  });
-
-  // Services
-  const cards = document.querySelectorAll('.service-card');
-  [1,2,3,4,5,6].forEach((i,idx) => {
-    const card = cards[idx]; if(!card) return;
-    const icon = card.querySelector('.service-icon'); if(icon && c['s'+i+'_icon']) icon.textContent = c['s'+i+'_icon'];
-    const nom  = card.querySelector('.service-name');  if(nom  && c['s'+i+'_nom'])  nom.textContent  = c['s'+i+'_nom'];
-    const desc = card.querySelector('.service-desc');  if(desc && c['s'+i+'_desc']) desc.textContent = c['s'+i+'_desc'];
-  });
-
-  // Contact
-  document.querySelectorAll('.info-item').forEach(item => {
-    const icon = item.querySelector('.info-icon');
-    const val  = item.querySelector('.info-value');
-    if (!icon || !val) return;
-    const t = icon.textContent;
-    if (t.includes('📍') && c.adresse)   val.innerHTML  = c.adresse;
-    if (t.includes('📞') && c.telephone) val.textContent = c.telephone;
-    if (t.includes('✉️') && c.email)     val.textContent = c.email;
-    if (t.includes('⏰') && c.horaires)  val.innerHTML  = c.horaires;
-  });
-
+  // Masquer le loader dans tous les cas
+  setTimeout(() => document.getElementById('loading').classList.add('hidden'), 100);
   calcDevis();
 }
 
-function updateDevisSelect(rows) {
-  const sel = document.getElementById('d-type');
-  if (!sel || !rows.length) return;
-  sel.innerHTML = rows.map(r => `<option value="${r.type}">${r.label}</option>`).join('');
+// ═══════════════════════════════════════════════════════
+// APPLY MODULES — afficher/masquer sections
+// ═══════════════════════════════════════════════════════
+function applyModules(modules) {
+  const hasGalerie = modules.includes('galerie');
+  const hasDevis   = modules.includes('devis');
+
+  // Section galerie
+  document.getElementById('realisations').style.display = hasGalerie ? '' : 'none';
+  document.getElementById('nav-li-galerie').style.display = hasGalerie ? '' : 'none';
+  document.getElementById('cta-galerie').style.display = hasGalerie ? '' : 'none';
+
+  // Section devis
+  document.getElementById('simulateur').style.display = hasDevis ? '' : 'none';
+  document.getElementById('nav-li-devis').style.display = hasDevis ? '' : 'none';
+  document.getElementById('cta-devis').style.display = hasDevis ? '' : 'none';
 }
 
-function updateGalerie(photos) {
-  const gallery = document.querySelector('.gallery');
-  if (!gallery || !photos.length) return;
-  gallery.innerHTML = photos.map((p,i) =>
-    `<div class="gallery-item"${i===0?' style="grid-column:span 2"':''}>
+// ═══════════════════════════════════════════════════════
+// APPLY NOM ENTREPRISE
+// ═══════════════════════════════════════════════════════
+function applyNom(nom) {
+  document.getElementById('page-title').textContent = nom + ' — Artisans depuis 15 ans';
+  ['nav-logo','footer-logo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = nom + ' <span style="color:var(--accent)"></span>';
+  });
+  const fn = document.getElementById('footer-nom');
+  if (fn) fn.textContent = nom;
+  const ln = document.getElementById('loading-nom');
+  if (ln) ln.innerHTML = nom.replace(' ', ' <span>') + '</span>';
+}
+
+// ═══════════════════════════════════════════════════════
+// APPLY TEXTES depuis site_config
+// ═══════════════════════════════════════════════════════
+function applyTextes(c) {
+  const set = (id, val, html=false) => {
+    const el = document.getElementById(id);
+    if (el && val) html ? el.innerHTML = val : el.textContent = val;
+  };
+
+  // Hero
+  set('hero-tag',   c.hero_tag);
+  set('hero-title', c.hero_titre, true);
+  set('hero-sub',   c.hero_sub);
+
+  // Chiffres
+  set('k-annees-v',    c.kannees_v);    set('k-annees-l',    c.kannees_l);
+  set('k-chantiers-v', c.kchantiers_v); set('k-chantiers-l', c.kchantiers_l);
+  set('k-satis-v',     c.ksatis_v);     set('k-satis-l',     c.ksatis_l);
+  set('k-artisans-v',  c.kartisans_v);  set('k-artisans-l',  c.kartisans_l);
+
+  // Services
+  [1,2,3,4,5,6].forEach(i => {
+    set('s'+i+'-icon', c['s'+i+'_icon']);
+    set('s'+i+'-nom',  c['s'+i+'_nom']);
+    set('s'+i+'-desc', c['s'+i+'_desc']);
+  });
+
+  // Contact
+  set('c-adresse',  c.adresse, true);
+  set('c-tel',      c.telephone);
+  set('c-email',    c.email);
+  set('c-horaires', c.horaires, true);
+
+  // Nom entreprise si présent dans config
+  if (c.nom_entreprise) applyNom(c.nom_entreprise);
+}
+
+// ═══════════════════════════════════════════════════════
+// APPLY GALERIE
+// ═══════════════════════════════════════════════════════
+function applyGalerie(photos) {
+  const gallery = document.getElementById('gallery');
+  if (!gallery) return;
+  gallery.innerHTML = photos.map((p, i) =>
+    `<div class="gallery-item reveal">
       <img src="${p.photo_url}" alt="${p.legende||''}" loading="lazy">
       ${p.legende ? `<div class="gallery-caption">${p.legende}</div>` : ''}
     </div>`
   ).join('');
-  gallery.querySelectorAll('.gallery-item').forEach(el => {
-    el.style.opacity='0'; el.style.transform='translateY(20px)';
-    el.style.transition='opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
-  });
+  // Réactiver scroll reveal sur nouvelles images
+  gallery.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 }
 
 // ═══════════════════════════════════════════════════════
-// CHARGEMENT SUPABASE
+// APPLY DEVIS CONFIG
 // ═══════════════════════════════════════════════════════
-async function loadFromSupabase() {
-  console.log('🔄 [Velops] Début chargement Supabase...');
-  try {
-    const H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
+function applyDevis(rows) {
+  // Mettre à jour les tarifs
+  tarifBase = {};
+  rows.forEach(r => tarifBase[r.type] = parseFloat(r.tarif_base) || 65);
 
-    // 1. Récupérer les modules actifs du client
-    const clientRes = await fetch(
-      SB_URL + '/rest/v1/clients_sites?slug=eq.' + CLIENT_SLUG + '&select=modules',
-      { headers: H }
-    );
-    if (clientRes.ok) {
-      const rows = await clientRes.json();
-      console.log('📦 [Velops] Client trouvé:', rows);
-      if (rows.length > 0 && rows[0].modules) {
-        activeModules = rows[0].modules;
-        console.log('✅ [Velops] Modules actifs:', activeModules);
-        applyModules();
-      } else {
-        console.warn('⚠️ [Velops] Aucun client trouvé pour slug =', CLIENT_SLUG);
-      }
-    } else {
-      console.error('❌ [Velops] Erreur fetch client:', clientRes.status, await clientRes.text());
-    }
-
-    // 2. Textes (seulement si module textes actif)
-    console.log('📝 [Velops] Module textes actif ?', activeModules.includes('textes'));
-    if (activeModules.includes('textes')) {
-      const cfgRes = await fetch(
-        SB_URL + '/rest/v1/site_config?client_slug=eq.' + CLIENT_SLUG + '&select=cle,valeur',
-        { headers: H }
-      );
-      if (cfgRes.ok) {
-        const rows = await cfgRes.json();
-        rows.forEach(r => { siteConfig[r.cle] = r.valeur; });
-        applyConfig();
-      }
-    }
-
-    // 3. Galerie (seulement si module galerie actif)
-    console.log('🖼 [Velops] Module galerie actif ?', activeModules.includes('galerie'));
-    if (activeModules.includes('galerie')) {
-      const galRes = await fetch(
-        SB_URL + '/rest/v1/site_galerie?client_slug=eq.' + CLIENT_SLUG + '&order=ordre.asc&select=photo_url,legende',
-        { headers: H }
-      );
-      if (galRes.ok) {
-        const photos = await galRes.json();
-        if (photos.length > 0) updateGalerie(photos);
-      }
-    }
-
-    // 4. Devis (seulement si module devis actif)
-    console.log('🧮 [Velops] Module devis actif ?', activeModules.includes('devis'));
-    if (activeModules.includes('devis')) {
-      const devisRes = await fetch(
-        SB_URL + '/rest/v1/site_devis_config?client_slug=eq.' + CLIENT_SLUG + '&actif=eq.true&select=type,label,tarif_base',
-        { headers: H }
-      );
-      if (devisRes.ok) {
-        const rows = await devisRes.json();
-        if (rows.length > 0) {
-          tarifBase = {};
-          rows.forEach(r => { tarifBase[r.type] = parseFloat(r.tarif_base) || TARIF_BASE_DEFAULT[r.type]; });
-          updateDevisSelect(rows);
-          calcDevis();
-        }
-      }
-    }
-
-  } catch(e) {
-    console.error('❌ [Velops] ERREUR Supabase:', e);
+  // Mettre à jour le select
+  const sel = document.getElementById('d-type');
+  if (sel) {
+    sel.innerHTML = rows.map(r =>
+      `<option value="${r.type}">${r.label}</option>`
+    ).join('');
   }
-  console.log('✅ [Velops] loadFromSupabase() terminé. Modules actifs:', activeModules);
-}
-
-// ═══════════════════════════════════════════════════════
-// SIMULATEUR DE DEVIS
-// ═══════════════════════════════════════════════════════
-let optionsTotal = 0;
-
-function toggleOption(btn) {
-  btn.classList.toggle('active');
-  optionsTotal = [...document.querySelectorAll('.option-btn.active')]
-    .reduce((s,b) => s + parseInt(b.dataset.val), 0);
   calcDevis();
 }
 
-function fmt(n) { return Math.round(n).toLocaleString('fr-FR') + ' \u20ac'; }
+// ═══════════════════════════════════════════════════════
+// SIMULATEUR
+// ═══════════════════════════════════════════════════════
+function toggleOption(btn) {
+  btn.classList.toggle('active');
+  optionsTotal = [...document.querySelectorAll('.option-btn.active')]
+    .reduce((s, b) => s + parseInt(b.dataset.val), 0);
+  calcDevis();
+}
+
+function fmt(n) { return Math.round(n).toLocaleString('fr-FR') + ' €'; }
 
 function calcDevis() {
   const typeEl    = document.getElementById('d-type');
@@ -1110,25 +602,24 @@ function calcDevis() {
   const surface = parseInt(surfaceEl.value);
   const finition= finEl.value;
   const delai   = parseFloat(delaiEl.value);
+  const base    = tarifBase[type] || 65;
+  const tarif   = base * (COEF[finition]||1) * delai;
+  const mdo     = tarif * 0.6 * surface;
+  const mat     = tarif * 0.32 * surface;
+  const dep     = 300;
+  const total   = mdo + mat + dep + optionsTotal;
 
-  const base  = tarifBase[type] || TARIF_BASE_DEFAULT[type] || 65;
-  const tarif = base * COEF_FINITION[finition] * delai;
-  const mdo   = tarif * 0.6 * surface;
-  const mat   = tarif * 0.32 * surface;
-  const dep   = 300;
-  const total = mdo + mat + dep + optionsTotal;
-
-  document.getElementById('res-price').textContent = fmt(total);
-  document.getElementById('res-range').textContent = `Fourchette\u00a0: ${fmt(total*0.85)} \u2013 ${fmt(total*1.15)}`;
-  document.getElementById('b-mdo').textContent = fmt(mdo);
-  document.getElementById('b-mat').textContent = fmt(mat);
-  document.getElementById('b-opt').textContent = fmt(optionsTotal);
-  document.getElementById('b-dep').textContent = fmt(dep);
-  document.getElementById('res-dispo').textContent = DISPO_MAP[type] || '2\u20133 semaines';
+  document.getElementById('res-price').textContent  = fmt(total);
+  document.getElementById('res-range').textContent  = `Fourchette : ${fmt(total*.85)} – ${fmt(total*1.15)}`;
+  document.getElementById('b-mdo').textContent      = fmt(mdo);
+  document.getElementById('b-mat').textContent      = fmt(mat);
+  document.getElementById('b-opt').textContent      = fmt(optionsTotal);
+  document.getElementById('b-dep').textContent      = fmt(dep);
+  document.getElementById('res-dispo').textContent  = DISPO[type] || '2–3 semaines';
 }
 
 // ═══════════════════════════════════════════════════════
-// FORMULAIRE CONTACT
+// FORMULAIRE
 // ═══════════════════════════════════════════════════════
 function handleSubmit(e) {
   e.preventDefault();
@@ -1140,28 +631,21 @@ function handleSubmit(e) {
 // ═══════════════════════════════════════════════════════
 // SCROLL REVEAL
 // ═══════════════════════════════════════════════════════
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.style.opacity = '1';
-      e.target.style.transform = 'translateY(0)';
-    }
-  });
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-document.querySelectorAll('.service-card, .gallery-item, .chiffre-item').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)';
-  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-  observer.observe(el);
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
 });
 
 // ═══════════════════════════════════════════════════════
-// INIT
+// DÉMARRAGE
 // ═══════════════════════════════════════════════════════
-applyConfig();       // affichage immédiat avec valeurs par défaut
-applyModules();      // masquer les sections selon modules par défaut
-loadFromSupabase();  // puis mise à jour depuis Supabase (async)
+calcDevis();
+init(); // charge Supabase et met à jour le DOM
 </script>
 </body>
 </html>
