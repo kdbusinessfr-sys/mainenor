@@ -411,211 +411,81 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
 
 <script>
 // ═══════════════════════════════════════════════════════
-// CONFIG
+// CONFIG — un seul paramètre à gérer depuis le dashboard
 // ═══════════════════════════════════════════════════════
 const SB_URL      = 'https://gcxwbgsdblbachjgheqq.supabase.co';
 const SB_KEY      = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjeHdiZ3NkYmxiYWNoamdoZXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjIxNTEsImV4cCI6MjA4ODgzODE1MX0.awOma2ufFoEa7LjxWZe6SgR7TOGbM_D9kY-wmLB0ZG8';
 const CLIENT_SLUG = 'mainenor';
-const SB_H        = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
-
-// Tarifs & maps par défaut
-let tarifBase = { maconnerie:65, renovation:85, ravalement:45, carrelage:55, terrassement:40, petits:70 };
-const COEF    = { standard:1, moyen:1.35, premium:1.75 };
-const DISPO   = { maconnerie:'3 semaines', renovation:'6 semaines', ravalement:'2 semaines', carrelage:'2 semaines', terrassement:'1 semaine', petits:'48h' };
-let optionsTotal = 0;
 
 // ═══════════════════════════════════════════════════════
-// INIT — chargement Supabase
+// VÉRIFICATION STATUT — actif ou maintenance
 // ═══════════════════════════════════════════════════════
-async function init() {
+async function checkStatut() {
   try {
-    // Tout en parallèle
-    const [clientRes, cfgRes, galRes, devisRes] = await Promise.all([
-      fetch(SB_URL + '/rest/v1/clients_sites?slug=eq.' + CLIENT_SLUG + '&select=modules,nom_entreprise', { headers: SB_H }),
-      fetch(SB_URL + '/rest/v1/site_config?client_slug=eq.'       + CLIENT_SLUG + '&select=cle,valeur', { headers: SB_H }),
-      fetch(SB_URL + '/rest/v1/site_galerie?client_slug=eq.'      + CLIENT_SLUG + '&order=ordre.asc&select=photo_url,legende', { headers: SB_H }),
-      fetch(SB_URL + '/rest/v1/site_devis_config?client_slug=eq.' + CLIENT_SLUG + '&actif=eq.true&select=type,label,tarif_base', { headers: SB_H }),
-    ]);
-
-    // 1. Modules — quelles sections afficher
-    if (clientRes.ok) {
-      const [client] = await clientRes.json();
-      if (client) {
-        applyModules(client.modules || []);
-        if (client.nom_entreprise) applyNom(client.nom_entreprise);
-      }
+    const r = await fetch(
+      SB_URL + '/rest/v1/sites_statut?slug=eq.' + CLIENT_SLUG + '&select=actif',
+      { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY } }
+    );
+    if (r.ok) {
+      const [data] = await r.json();
+      if (data && data.actif === false) showMaintenance();
     }
-
-    // 2. Textes
-    if (cfgRes.ok) {
-      const rows = await cfgRes.json();
-      const cfg = {};
-      rows.forEach(r => cfg[r.cle] = r.valeur);
-      applyTextes(cfg);
-    }
-
-    // 3. Galerie
-    if (galRes.ok) {
-      const photos = await galRes.json();
-      if (photos.length) applyGalerie(photos);
-    }
-
-    // 4. Devis
-    if (devisRes.ok) {
-      const rows = await devisRes.json();
-      if (rows.length) applyDevis(rows);
-    }
-
   } catch(e) {
-    console.warn('Supabase indisponible — site affiché avec valeurs par défaut.', e);
+    // Si Supabase inaccessible → site affiché normalement
   }
-
-  // Masquer le loader dans tous les cas
-  setTimeout(() => document.getElementById('loading').classList.add('hidden'), 100);
-  calcDevis();
+  document.getElementById('loading').classList.add('hidden');
 }
 
-// ═══════════════════════════════════════════════════════
-// APPLY MODULES — afficher/masquer sections
-// ═══════════════════════════════════════════════════════
-function applyModules(modules) {
-  const hasGalerie = modules.includes('galerie');
-  const hasDevis   = modules.includes('devis');
-
-  // Section galerie
-  document.getElementById('realisations').style.display = hasGalerie ? '' : 'none';
-  document.getElementById('nav-li-galerie').style.display = hasGalerie ? '' : 'none';
-  document.getElementById('cta-galerie').style.display = hasGalerie ? '' : 'none';
-
-  // Section devis
-  document.getElementById('simulateur').style.display = hasDevis ? '' : 'none';
-  document.getElementById('nav-li-devis').style.display = hasDevis ? '' : 'none';
-  document.getElementById('cta-devis').style.display = hasDevis ? '' : 'none';
-}
-
-// ═══════════════════════════════════════════════════════
-// APPLY NOM ENTREPRISE
-// ═══════════════════════════════════════════════════════
-function applyNom(nom) {
-  document.getElementById('page-title').textContent = nom + ' — Artisans depuis 15 ans';
-  ['nav-logo','footer-logo'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = nom + ' <span style="color:var(--accent)"></span>';
-  });
-  const fn = document.getElementById('footer-nom');
-  if (fn) fn.textContent = nom;
-  const ln = document.getElementById('loading-nom');
-  if (ln) ln.innerHTML = nom.replace(' ', ' <span>') + '</span>';
-}
-
-// ═══════════════════════════════════════════════════════
-// APPLY TEXTES depuis site_config
-// ═══════════════════════════════════════════════════════
-function applyTextes(c) {
-  const set = (id, val, html=false) => {
-    const el = document.getElementById(id);
-    if (el && val) html ? el.innerHTML = val : el.textContent = val;
-  };
-
-  // Hero
-  set('hero-tag',   c.hero_tag);
-  set('hero-title', c.hero_titre, true);
-  set('hero-sub',   c.hero_sub);
-
-  // Chiffres
-  set('k-annees-v',    c.kannees_v);    set('k-annees-l',    c.kannees_l);
-  set('k-chantiers-v', c.kchantiers_v); set('k-chantiers-l', c.kchantiers_l);
-  set('k-satis-v',     c.ksatis_v);     set('k-satis-l',     c.ksatis_l);
-  set('k-artisans-v',  c.kartisans_v);  set('k-artisans-l',  c.kartisans_l);
-
-  // Services
-  [1,2,3,4,5,6].forEach(i => {
-    set('s'+i+'-icon', c['s'+i+'_icon']);
-    set('s'+i+'-nom',  c['s'+i+'_nom']);
-    set('s'+i+'-desc', c['s'+i+'_desc']);
-  });
-
-  // Contact
-  set('c-adresse',  c.adresse, true);
-  set('c-tel',      c.telephone);
-  set('c-email',    c.email);
-  set('c-horaires', c.horaires, true);
-
-  // Nom entreprise si présent dans config
-  if (c.nom_entreprise) applyNom(c.nom_entreprise);
-}
-
-// ═══════════════════════════════════════════════════════
-// APPLY GALERIE
-// ═══════════════════════════════════════════════════════
-function applyGalerie(photos) {
-  const gallery = document.getElementById('gallery');
-  if (!gallery) return;
-  gallery.innerHTML = photos.map((p, i) =>
-    `<div class="gallery-item reveal">
-      <img src="${p.photo_url}" alt="${p.legende||''}" loading="lazy">
-      ${p.legende ? `<div class="gallery-caption">${p.legende}</div>` : ''}
-    </div>`
-  ).join('');
-  // Réactiver scroll reveal sur nouvelles images
-  gallery.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-}
-
-// ═══════════════════════════════════════════════════════
-// APPLY DEVIS CONFIG
-// ═══════════════════════════════════════════════════════
-function applyDevis(rows) {
-  // Mettre à jour les tarifs
-  tarifBase = {};
-  rows.forEach(r => tarifBase[r.type] = parseFloat(r.tarif_base) || 65);
-
-  // Mettre à jour le select
-  const sel = document.getElementById('d-type');
-  if (sel) {
-    sel.innerHTML = rows.map(r =>
-      `<option value="${r.type}">${r.label}</option>`
-    ).join('');
-  }
-  calcDevis();
+function showMaintenance() {
+  document.body.innerHTML = `
+    <div style="min-height:100vh;background:#2C2825;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;padding:2rem">
+      <div style="text-align:center;max-width:480px">
+        <div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#fff;margin-bottom:.5rem">
+          Maçonnerie <span style="color:#C8832A">Mainenor</span>
+        </div>
+        <div style="width:60px;height:2px;background:#C8832A;margin:1.5rem auto"></div>
+        <div style="font-size:1.1rem;color:rgba(168,152,128,.9);line-height:1.75;margin-bottom:2rem">
+          Notre site est temporairement en maintenance.<br>
+          Nous revenons très vite !
+        </div>
+        <div style="font-size:.9rem;color:rgba(168,152,128,.6)">
+          Une urgence ? Appelez-nous :<br>
+          <a href="tel:0123456789" style="color:#C8832A;font-weight:500;text-decoration:none">01 23 45 67 89</a>
+        </div>
+      </div>
+    </div>`;
 }
 
 // ═══════════════════════════════════════════════════════
 // SIMULATEUR
 // ═══════════════════════════════════════════════════════
+const TARIF = { maconnerie:65, renovation:85, ravalement:45, carrelage:55, terrassement:40, petits:70 };
+const COEF  = { standard:1, moyen:1.35, premium:1.75 };
+const DISPO = { maconnerie:'3 semaines', renovation:'6 semaines', ravalement:'2 semaines', carrelage:'2 semaines', terrassement:'1 semaine', petits:'48h' };
+let optionsTotal = 0;
+
 function toggleOption(btn) {
   btn.classList.toggle('active');
-  optionsTotal = [...document.querySelectorAll('.option-btn.active')]
-    .reduce((s, b) => s + parseInt(b.dataset.val), 0);
+  optionsTotal = [...document.querySelectorAll('.option-btn.active')].reduce((s,b)=>s+parseInt(b.dataset.val),0);
   calcDevis();
 }
-
 function fmt(n) { return Math.round(n).toLocaleString('fr-FR') + ' €'; }
-
 function calcDevis() {
-  const typeEl    = document.getElementById('d-type');
-  const surfaceEl = document.getElementById('d-surface');
-  const finEl     = document.getElementById('d-finition');
-  const delaiEl   = document.getElementById('d-delai');
-  if (!typeEl || !surfaceEl || !finEl || !delaiEl) return;
-
-  const type    = typeEl.value;
-  const surface = parseInt(surfaceEl.value);
-  const finition= finEl.value;
-  const delai   = parseFloat(delaiEl.value);
-  const base    = tarifBase[type] || 65;
-  const tarif   = base * (COEF[finition]||1) * delai;
-  const mdo     = tarif * 0.6 * surface;
-  const mat     = tarif * 0.32 * surface;
-  const dep     = 300;
-  const total   = mdo + mat + dep + optionsTotal;
-
-  document.getElementById('res-price').textContent  = fmt(total);
-  document.getElementById('res-range').textContent  = `Fourchette : ${fmt(total*.85)} – ${fmt(total*1.15)}`;
-  document.getElementById('b-mdo').textContent      = fmt(mdo);
-  document.getElementById('b-mat').textContent      = fmt(mat);
-  document.getElementById('b-opt').textContent      = fmt(optionsTotal);
-  document.getElementById('b-dep').textContent      = fmt(dep);
-  document.getElementById('res-dispo').textContent  = DISPO[type] || '2–3 semaines';
+  const type=document.getElementById('d-type')?.value;
+  const surface=parseInt(document.getElementById('d-surface')?.value||50);
+  const fin=document.getElementById('d-finition')?.value;
+  const delai=parseFloat(document.getElementById('d-delai')?.value||1);
+  if(!type) return;
+  const tarif=(TARIF[type]||65)*(COEF[fin]||1)*delai;
+  const mdo=tarif*.6*surface, mat=tarif*.32*surface, dep=300;
+  const total=mdo+mat+dep+optionsTotal;
+  document.getElementById('res-price').textContent=fmt(total);
+  document.getElementById('res-range').textContent=`Fourchette : ${fmt(total*.85)} – ${fmt(total*1.15)}`;
+  document.getElementById('b-mdo').textContent=fmt(mdo);
+  document.getElementById('b-mat').textContent=fmt(mat);
+  document.getElementById('b-opt').textContent=fmt(optionsTotal);
+  document.getElementById('b-dep').textContent=fmt(dep);
+  document.getElementById('res-dispo').textContent=DISPO[type]||'2–3 semaines';
 }
 
 // ═══════════════════════════════════════════════════════
@@ -623,29 +493,27 @@ function calcDevis() {
 // ═══════════════════════════════════════════════════════
 function handleSubmit(e) {
   e.preventDefault();
-  document.getElementById('form-success').style.display = 'block';
-  e.target.querySelectorAll('input,textarea,select').forEach(el => el.disabled = true);
-  e.target.querySelector('.submit-btn').style.display = 'none';
+  document.getElementById('form-success').style.display='block';
+  e.target.querySelectorAll('input,textarea,select').forEach(el=>el.disabled=true);
+  e.target.querySelector('.submit-btn').style.display='none';
 }
 
 // ═══════════════════════════════════════════════════════
-// SCROLL REVEAL
+// SCROLL REVEAL + NAV
 // ═══════════════════════════════════════════════════════
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// Navbar scroll
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
 });
 
 // ═══════════════════════════════════════════════════════
-// DÉMARRAGE
+// INIT
 // ═══════════════════════════════════════════════════════
 calcDevis();
-init(); // charge Supabase et met à jour le DOM
+checkStatut();
 </script>
 </body>
 </html>
