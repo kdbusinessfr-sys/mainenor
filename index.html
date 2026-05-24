@@ -80,6 +80,21 @@ nav.scrolled{padding:.8rem 5vw}
 .gallery-skeleton.featured{grid-column:span 2;aspect-ratio:16/9}
 .gallery-skeleton:not(.featured){aspect-ratio:4/3}
 @keyframes shimmer{0%,100%{opacity:.6}50%{opacity:1}}
+/* ── LIGHTBOX ── */
+.lightbox{position:fixed;inset:0;z-index:300;background:rgba(26,23,20,.96);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.lightbox.open{opacity:1;pointer-events:all}
+.lightbox-inner{position:relative;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.lightbox-img{max-width:100%;max-height:80vh;object-fit:contain;border-radius:2px;box-shadow:0 20px 60px rgba(0,0,0,.6);transform:scale(.95);transition:transform .3s}
+.lightbox.open .lightbox-img{transform:scale(1)}
+.lightbox-caption{color:rgba(255,255,255,.75);font-size:.85rem;letter-spacing:.06em;text-align:center}
+.lightbox-close{position:fixed;top:1.2rem;right:1.5rem;background:none;border:none;color:rgba(255,255,255,.6);font-size:2rem;cursor:pointer;line-height:1;transition:color .2s;padding:.3rem .6rem}
+.lightbox-close:hover{color:var(--accent)}
+.lightbox-nav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--white);font-size:1.4rem;width:48px;height:48px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(4px)}
+.lightbox-nav:hover{background:var(--accent);border-color:var(--accent)}
+.lightbox-prev{left:1rem}
+.lightbox-next{right:1rem}
+.lightbox-counter{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.4);font-size:.78rem;letter-spacing:.12em}
+
 
 /* ── SIMULATEUR ── */
 #simulateur{background:var(--stone)}
@@ -650,12 +665,16 @@ async function loadGalerie() {
     const div = document.createElement('div');
     div.className = 'gallery-item reveal' + (i === 0 ? ' featured' : '');
     const legende = p.legende || p.caption || '';
+    div.setAttribute('onclick', `openLightbox(${i})`);
     div.innerHTML = `
       <img src="${p.url}" alt="${legende}" loading="lazy">
       ${legende ? `<div class="gallery-caption">${legende}</div>` : ''}
     `;
     gallery.appendChild(div);
   });
+
+  // Stocker pour la lightbox
+  lbPhotos = photos;
 
   // Ré-observer les nouveaux éléments
   gallery.querySelectorAll('.reveal').forEach(el => observer.observe(el));
@@ -903,6 +922,62 @@ calcDevis();
 checkStatut();
 loadGalerie();
 loadAvis();
+// ═══════════════════════════════════════════════════════
+// LIGHTBOX
+// ═══════════════════════════════════════════════════════
+let lbPhotos = [], lbIndex = 0;
+
+function openLightbox(index) {
+  lbIndex = index;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeLightboxOutside(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+function lightboxNav(dir) {
+  lbIndex = (lbIndex + dir + lbPhotos.length) % lbPhotos.length;
+  updateLightbox();
+}
+function updateLightbox() {
+  const p = lbPhotos[lbIndex];
+  if (!p) return;
+  const img = document.getElementById('lb-img');
+  img.style.opacity = '0';
+  img.src = p.url;
+  img.onload = () => { img.style.opacity = '1'; img.style.transition = 'opacity .25s'; };
+  document.getElementById('lb-caption').textContent = p.legende || p.caption || '';
+  document.getElementById('lb-counter').textContent = (lbIndex + 1) + ' / ' + lbPhotos.length;
+  // Masquer les flèches si 1 seule photo
+  document.querySelector('.lightbox-prev').style.display = lbPhotos.length > 1 ? 'flex' : 'none';
+  document.querySelector('.lightbox-next').style.display = lbPhotos.length > 1 ? 'flex' : 'none';
+}
+// Clavier : ← → Échap
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('lightbox');
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'ArrowLeft')  lightboxNav(-1);
+  if (e.key === 'ArrowRight') lightboxNav(1);
+  if (e.key === 'Escape')     closeLightbox();
+});
+
 </script>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">&#8592;</button>
+  <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">&#8594;</button>
+  <div class="lightbox-inner">
+    <img class="lightbox-img" id="lb-img" src="" alt="">
+    <div class="lightbox-caption" id="lb-caption"></div>
+  </div>
+  <div class="lightbox-counter" id="lb-counter"></div>
+</div>
 </body>
 </html>
