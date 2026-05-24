@@ -742,12 +742,11 @@ async function submitAvis(e) {
   }
 
   const payload = {
-    slug: CLIENT_SLUG,
     prenom,
     projet: projet || null,
     note,
     texte,
-    statut: 'pending'  // Velops valide depuis le dashboard
+    statut: 'pending'
   };
 
   try {
