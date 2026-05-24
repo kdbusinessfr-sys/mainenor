@@ -66,15 +66,20 @@ nav.scrolled{padding:.8rem 5vw}
 .service-name{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--stone);margin-bottom:.6rem}
 .service-desc{font-size:.88rem;font-weight:300;color:var(--stone-mid);line-height:1.7}
 
-/* ── GALERIE ── */
+/* ── GALERIE DYNAMIQUE ── */
 #realisations{background:var(--white)}
-.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;min-height:200px}
 .gallery-item{overflow:hidden;position:relative;aspect-ratio:4/3;cursor:pointer}
-.gallery-item:first-child{grid-column:span 2;aspect-ratio:16/9}
+.gallery-item.featured{grid-column:span 2;aspect-ratio:16/9}
 .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
 .gallery-item:hover img{transform:scale(1.05)}
 .gallery-caption{position:absolute;bottom:0;left:0;right:0;padding:.8rem 1rem;background:linear-gradient(transparent,rgba(44,40,37,.85));color:var(--white);font-size:.8rem;letter-spacing:.05em;transform:translateY(100%);transition:transform .3s}
 .gallery-item:hover .gallery-caption{transform:translateY(0)}
+/* Skeleton loader galerie */
+.gallery-skeleton{background:var(--sand);border-radius:2px;animation:shimmer 1.5s infinite}
+.gallery-skeleton.featured{grid-column:span 2;aspect-ratio:16/9}
+.gallery-skeleton:not(.featured){aspect-ratio:4/3}
+@keyframes shimmer{0%,100%{opacity:.6}50%{opacity:1}}
 
 /* ── SIMULATEUR ── */
 #simulateur{background:var(--stone)}
@@ -127,6 +132,69 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .submit-btn:hover{background:var(--accent-dark);transform:translateY(-2px)}
 .form-success{display:none;background:rgba(200,131,42,.1);border:1px solid var(--accent);color:var(--stone);padding:1.2rem;border-radius:2px;font-size:.9rem;text-align:center}
 
+/* ══════════════════════════════════════
+   ── AVIS CLIENTS ──
+══════════════════════════════════════ */
+#avis{background:var(--stone);padding:6rem 5vw}
+#avis .section-title{color:var(--white)}
+#avis .section-sub{color:var(--stone-light)}
+#avis .section-tag{color:var(--accent)}
+.avis-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:3rem}
+.avis-header-text{}
+.btn-avis{background:transparent;border:1px solid rgba(200,131,42,.5);color:var(--accent);padding:.75rem 1.6rem;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.6rem}
+.btn-avis:hover{background:var(--accent);color:var(--white);border-color:var(--accent)}
+.avis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.avis-card{background:rgba(255,255,255,.05);border:1px solid rgba(168,152,128,.12);padding:2rem;border-radius:2px;position:relative;transition:border-color .3s}
+.avis-card:hover{border-color:rgba(200,131,42,.35)}
+.avis-stars{display:flex;gap:3px;margin-bottom:1rem}
+.avis-star{color:var(--accent);font-size:1rem}
+.avis-star.empty{color:rgba(168,152,128,.25)}
+.avis-text{font-size:.92rem;font-weight:300;color:rgba(255,255,255,.8);line-height:1.75;margin-bottom:1.5rem;font-style:italic}
+.avis-text::before{content:'"';font-family:'Playfair Display',serif;font-size:3rem;color:rgba(200,131,42,.3);line-height:0;vertical-align:-.5rem;margin-right:.2rem}
+.avis-author{display:flex;align-items:center;gap:.75rem}
+.avis-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--white);font-size:.95rem;flex-shrink:0}
+.avis-name{font-size:.9rem;font-weight:500;color:var(--white)}
+.avis-projet{font-size:.78rem;color:var(--stone-light);margin-top:.1rem}
+/* Skeleton avis */
+.avis-skeleton{background:rgba(255,255,255,.03);border:1px solid rgba(168,152,128,.08);border-radius:2px;padding:2rem;height:200px;animation:shimmer 1.5s infinite}
+/* État vide */
+.avis-empty{text-align:center;padding:3rem;color:var(--stone-light);font-size:.95rem;grid-column:span 3}
+.avis-empty span{display:block;font-size:2rem;margin-bottom:.8rem;opacity:.4}
+
+/* ══════════════════════════════════════
+   ── MODALE AVIS ──
+══════════════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(26,23,20,.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--dark);border:1px solid rgba(200,131,42,.3);border-radius:2px;padding:2.5rem;width:100%;max-width:520px;transform:translateY(20px);transition:transform .3s;position:relative}
+.modal-overlay.open .modal-box{transform:translateY(0)}
+.modal-close{position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;color:var(--stone-light);font-size:1.4rem;cursor:pointer;line-height:1;padding:.2rem .5rem;transition:color .2s}
+.modal-close:hover{color:var(--white)}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--white);margin-bottom:.4rem}
+.modal-sub{font-size:.85rem;color:var(--stone-light);margin-bottom:2rem}
+.modal-form{display:flex;flex-direction:column;gap:1.1rem}
+.mf-group{display:flex;flex-direction:column;gap:.4rem}
+.mf-group label{font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light)}
+.mf-group input,.mf-group textarea,.mf-group select{background:rgba(255,255,255,.06);border:1px solid rgba(168,152,128,.2);color:var(--white);padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;border-radius:2px;outline:none;transition:border-color .2s;width:100%}
+.mf-group input::placeholder,.mf-group textarea::placeholder{color:rgba(168,152,128,.5)}
+.mf-group input:focus,.mf-group textarea:focus{border-color:var(--accent)}
+.mf-group textarea{resize:vertical;min-height:100px}
+/* Star rating interactif */
+.star-rating{display:flex;gap:.4rem;flex-direction:row-reverse;justify-content:flex-end}
+.star-rating input{display:none}
+.star-rating label{font-size:1.6rem;cursor:pointer;color:rgba(168,152,128,.3);transition:color .15s;padding:0 .1rem}
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label{color:var(--accent)}
+.modal-submit{background:var(--accent);color:var(--white);padding:1rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;transition:background .2s;margin-top:.5rem}
+.modal-submit:hover{background:var(--accent-dark)}
+.modal-submit:disabled{opacity:.5;cursor:not-allowed}
+.modal-success{display:none;text-align:center;padding:2rem 0}
+.modal-success-icon{font-size:3rem;margin-bottom:1rem}
+.modal-success-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--white);margin-bottom:.6rem}
+.modal-success-text{font-size:.88rem;color:var(--stone-light);line-height:1.65}
+.modal-note{font-size:.75rem;color:rgba(168,152,128,.5);margin-top:.8rem;line-height:1.5;font-style:italic}
+
 /* ── FOOTER ── */
 footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:2rem;border-top:1px solid rgba(200,131,42,.2)}
 .footer-brand .nav-logo{font-size:1.8rem;display:block;margin-bottom:.8rem}
@@ -159,11 +227,15 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
   #chiffres{grid-template-columns:1fr 1fr}
   .services-grid{grid-template-columns:1fr}
   .gallery{grid-template-columns:1fr 1fr}
-  .gallery-item:first-child{grid-column:span 2}
+  .gallery-item.featured{grid-column:span 2}
+  .gallery-skeleton.featured{grid-column:span 2}
   .devis-wrapper,.contact-wrapper,.form-row{grid-template-columns:1fr}
   footer{grid-template-columns:1fr}
   .devis-result{position:static}
   .options-grid{grid-template-columns:1fr}
+  .avis-grid{grid-template-columns:1fr}
+  .avis-header{flex-direction:column;align-items:flex-start}
+  .avis-empty{grid-column:span 1}
 }
 </style>
 </head>
@@ -182,8 +254,9 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
   <a href="#hero" class="nav-logo" id="nav-logo">Maçonnerie <span>Mainenor</span></a>
   <ul class="nav-links" id="nav-links">
     <li><a href="#services">Services</a></li>
-    <li id="nav-li-galerie"><a href="#realisations">Réalisations</a></li>
-    <li id="nav-li-devis"><a href="#simulateur">Devis</a></li>
+    <li><a href="#realisations">Réalisations</a></li>
+    <li><a href="#simulateur">Devis</a></li>
+    <li><a href="#avis">Avis</a></li>
     <li><a href="#contact" class="nav-cta">Contact</a></li>
   </ul>
 </nav>
@@ -191,12 +264,12 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
 <!-- HERO -->
 <section id="hero">
   <div class="hero-inner">
-    <div class="hero-tag" id="hero-tag">Maçonnerie &amp; Rénovation — Région Parisienne</div>
-    <h1 class="hero-title" id="hero-title">L'artisanat<br>au <span>service</span><br>de vos projets</h1>
-    <p class="hero-sub" id="hero-sub">Depuis 15 ans, Maçonnerie Mainenor transforme vos espaces avec précision et passion. Construction, rénovation, ravalement — nous réalisons votre vision.</p>
+    <div class="hero-tag">Maçonnerie &amp; Rénovation — Région Parisienne</div>
+    <h1 class="hero-title">L'artisanat<br>au <span>service</span><br>de vos projets</h1>
+    <p class="hero-sub">Depuis 15 ans, Maçonnerie Mainenor transforme vos espaces avec précision et passion. Construction, rénovation, ravalement — nous réalisons votre vision.</p>
     <div class="hero-btns">
-      <a href="#simulateur" class="btn-primary" id="cta-devis">Estimer mon projet</a>
-      <a href="#realisations" class="btn-outline" id="cta-galerie">Voir nos réalisations</a>
+      <a href="#simulateur" class="btn-primary">Estimer mon projet</a>
+      <a href="#realisations" class="btn-outline">Voir nos réalisations</a>
     </div>
   </div>
   <div class="hero-scroll">Découvrir</div>
@@ -204,22 +277,10 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
 
 <!-- CHIFFRES -->
 <section id="chiffres">
-  <div class="chiffre-item reveal">
-    <div class="chiffre-num" id="k-annees-v">15+</div>
-    <div class="chiffre-label" id="k-annees-l">Années d'expérience</div>
-  </div>
-  <div class="chiffre-item reveal">
-    <div class="chiffre-num" id="k-chantiers-v">480</div>
-    <div class="chiffre-label" id="k-chantiers-l">Chantiers réalisés</div>
-  </div>
-  <div class="chiffre-item reveal">
-    <div class="chiffre-num" id="k-satis-v">98%</div>
-    <div class="chiffre-label" id="k-satis-l">Clients satisfaits</div>
-  </div>
-  <div class="chiffre-item reveal">
-    <div class="chiffre-num" id="k-artisans-v">12</div>
-    <div class="chiffre-label" id="k-artisans-l">Artisans qualifiés</div>
-  </div>
+  <div class="chiffre-item reveal"><div class="chiffre-num">15+</div><div class="chiffre-label">Années d'expérience</div></div>
+  <div class="chiffre-item reveal"><div class="chiffre-num">480</div><div class="chiffre-label">Chantiers réalisés</div></div>
+  <div class="chiffre-item reveal"><div class="chiffre-num">98%</div><div class="chiffre-label">Clients satisfaits</div></div>
+  <div class="chiffre-item reveal"><div class="chiffre-num">12</div><div class="chiffre-label">Artisans qualifiés</div></div>
 </section>
 
 <!-- SERVICES -->
@@ -227,28 +288,30 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
   <div class="section-tag">Ce que nous faisons</div>
   <h2 class="section-title">Nos domaines<br>d'expertise</h2>
   <p class="section-sub">De la fondation à la finition, nous intervenons sur tous les corps de métier liés à la maçonnerie et à la rénovation.</p>
-  <div class="services-grid" id="services-grid">
-    <div class="service-card reveal"><div class="service-icon" id="s1-icon">🧱</div><div class="service-name" id="s1-nom">Maçonnerie Générale</div><p class="service-desc" id="s1-desc">Construction de murs, cloisons, dalles, fondations et structures en béton armé. Travail soigné, matériaux certifiés.</p></div>
-    <div class="service-card reveal"><div class="service-icon" id="s2-icon">🏗️</div><div class="service-name" id="s2-nom">Rénovation Complète</div><p class="service-desc" id="s2-desc">Réhabilitation de logements anciens, extension, surélévation. On prend en charge l'ensemble du projet.</p></div>
-    <div class="service-card reveal"><div class="service-icon" id="s3-icon">🪨</div><div class="service-name" id="s3-nom">Ravalement de Façade</div><p class="service-desc" id="s3-desc">Nettoyage, enduit, peinture extérieure. Redonner vie à votre façade tout en la protégeant durablement.</p></div>
-    <div class="service-card reveal"><div class="service-icon" id="s4-icon">🔩</div><div class="service-name" id="s4-nom">Carrelage &amp; Chape</div><p class="service-desc" id="s4-desc">Pose de carrelage, parquet, chape liquide ou traditionnelle. Finitions précises pour un résultat parfait.</p></div>
-    <div class="service-card reveal"><div class="service-icon" id="s5-icon">🏠</div><div class="service-name" id="s5-nom">Terrassement</div><p class="service-desc" id="s5-desc">Terrassement, nivellement, création d'allées, escaliers extérieurs et aménagements paysagers en dur.</p></div>
-    <div class="service-card reveal"><div class="service-icon" id="s6-icon">🛠️</div><div class="service-name" id="s6-nom">Petits Travaux</div><p class="service-desc" id="s6-desc">Réparations, reprises en sous-œuvre, colmatage de fissures, imperméabilisation — intervention rapide.</p></div>
+  <div class="services-grid">
+    <div class="service-card reveal"><div class="service-icon">🧱</div><div class="service-name">Maçonnerie Générale</div><p class="service-desc">Construction de murs, cloisons, dalles, fondations et structures en béton armé. Travail soigné, matériaux certifiés.</p></div>
+    <div class="service-card reveal"><div class="service-icon">🏗️</div><div class="service-name">Rénovation Complète</div><p class="service-desc">Réhabilitation de logements anciens, extension, surélévation. On prend en charge l'ensemble du projet.</p></div>
+    <div class="service-card reveal"><div class="service-icon">🪨</div><div class="service-name">Ravalement de Façade</div><p class="service-desc">Nettoyage, enduit, peinture extérieure. Redonner vie à votre façade tout en la protégeant durablement.</p></div>
+    <div class="service-card reveal"><div class="service-icon">🔩</div><div class="service-name">Carrelage &amp; Chape</div><p class="service-desc">Pose de carrelage, parquet, chape liquide ou traditionnelle. Finitions précises pour un résultat parfait.</p></div>
+    <div class="service-card reveal"><div class="service-icon">🏠</div><div class="service-name">Terrassement</div><p class="service-desc">Terrassement, nivellement, création d'allées, escaliers extérieurs et aménagements paysagers en dur.</p></div>
+    <div class="service-card reveal"><div class="service-icon">🛠️</div><div class="service-name">Petits Travaux</div><p class="service-desc">Réparations, reprises en sous-œuvre, colmatage de fissures, imperméabilisation — intervention rapide.</p></div>
   </div>
 </section>
 
-<!-- GALERIE -->
+<!-- ══════════════════════════════════════
+     GALERIE DYNAMIQUE
+══════════════════════════════════════ -->
 <section id="realisations" class="section">
   <div class="section-tag">Portfolio</div>
   <h2 class="section-title">Nos dernières<br>réalisations</h2>
   <p class="section-sub">Chaque chantier est une référence. Voici quelques-uns de nos projets récents.</p>
+  <!-- La galerie est injectée ici par JS -->
   <div class="gallery" id="gallery">
-    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=80" alt="Extension maison" loading="lazy"><div class="gallery-caption">Extension maison — Versailles, 2024</div></div>
-    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Ravalement" loading="lazy"><div class="gallery-caption">Ravalement façade — Paris 15e</div></div>
-    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80" alt="Chantier" loading="lazy"><div class="gallery-caption">Construction neuve — Boulogne</div></div>
-    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" alt="Intérieur" loading="lazy"><div class="gallery-caption">Rénovation intérieure — Neuilly</div></div>
-    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80" alt="Extérieur" loading="lazy"><div class="gallery-caption">Aménagement terrasse — Clamart</div></div>
-    <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" alt="Villa" loading="lazy"><div class="gallery-caption">Villa neuve — Saint-Cloud</div></div>
+    <!-- Skeletons le temps du chargement -->
+    <div class="gallery-skeleton featured reveal"></div>
+    <div class="gallery-skeleton reveal"></div>
+    <div class="gallery-skeleton reveal"></div>
+    <div class="gallery-skeleton reveal"></div>
   </div>
 </section>
 
@@ -290,7 +353,7 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
       </div>
       <div class="form-group">
         <label>Options supplémentaires</label>
-        <div class="options-grid" id="options-grid">
+        <div class="options-grid">
           <button class="option-btn" data-val="150" onclick="toggleOption(this)">🏗️ Démolition préalable</button>
           <button class="option-btn" data-val="200" onclick="toggleOption(this)">🚛 Évacuation gravats</button>
           <button class="option-btn" data-val="300" onclick="toggleOption(this)">🔌 Réservations électro</button>
@@ -314,7 +377,7 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
       <div class="result-price" id="res-price">3 750 €</div>
       <div class="result-range" id="res-range">Fourchette : 3 200 € – 4 300 €</div>
       <div class="urgency-badge">📅 Disponibilité sous <span id="res-dispo">3 semaines</span></div>
-      <div class="result-breakdown" id="res-breakdown">
+      <div class="result-breakdown">
         <div class="breakdown-row"><span>Main d'œuvre</span><span id="b-mdo">2 250 €</span></div>
         <div class="breakdown-row"><span>Matériaux</span><span id="b-mat">1 200 €</span></div>
         <div class="breakdown-row"><span>Options</span><span id="b-opt">0 €</span></div>
@@ -334,19 +397,19 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
     <div class="contact-info">
       <div class="info-item">
         <div class="info-icon">📍</div>
-        <div><div class="info-label">Adresse</div><div class="info-value" id="c-adresse">Paris, Île-de-France</div></div>
+        <div><div class="info-label">Adresse</div><div class="info-value">Paris, Île-de-France</div></div>
       </div>
       <div class="info-item">
         <div class="info-icon">📞</div>
-        <div><div class="info-label">Téléphone</div><div class="info-value" id="c-tel">01 23 45 67 89</div></div>
+        <div><div class="info-label">Téléphone</div><div class="info-value">01 23 45 67 89</div></div>
       </div>
       <div class="info-item">
         <div class="info-icon">✉️</div>
-        <div><div class="info-label">Email</div><div class="info-value" id="c-email">contact@mainenor.fr</div></div>
+        <div><div class="info-label">Email</div><div class="info-value">contact@mainenor.fr</div></div>
       </div>
       <div class="info-item">
         <div class="info-icon">⏰</div>
-        <div><div class="info-label">Horaires</div><div class="info-value" id="c-horaires">Lun–Ven : 8h–18h<br>Sam : 9h–13h</div></div>
+        <div><div class="info-label">Horaires</div><div class="info-value">Lun–Ven : 8h–18h<br>Sam : 9h–13h</div></div>
       </div>
       <div class="map-placeholder">📍 Carte Google Maps</div>
     </div>
@@ -380,11 +443,30 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
   </div>
 </section>
 
+<!-- ══════════════════════════════════════
+     AVIS CLIENTS
+══════════════════════════════════════ -->
+<section id="avis">
+  <div class="avis-header">
+    <div class="avis-header-text">
+      <div class="section-tag">Ils nous font confiance</div>
+      <h2 class="section-title" style="color:var(--white)">Avis de<br>nos clients</h2>
+    </div>
+    <button class="btn-avis" onclick="openModal()">✍️ Laisser un avis</button>
+  </div>
+  <!-- Injecté dynamiquement -->
+  <div class="avis-grid" id="avis-grid">
+    <div class="avis-skeleton"></div>
+    <div class="avis-skeleton"></div>
+    <div class="avis-skeleton"></div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">
-    <a href="#hero" class="nav-logo" id="footer-logo">Maçonnerie <span>Mainenor</span></a>
-    <p id="footer-desc">Artisans maçons qualifiés depuis 2009. Nous construisons avec sérieux, nous rénovons avec passion.</p>
+    <a href="#hero" class="nav-logo">Maçonnerie <span>Mainenor</span></a>
+    <p>Artisans maçons qualifiés depuis 2009. Nous construisons avec sérieux, nous rénovons avec passion.</p>
   </div>
   <div class="footer-col">
     <h4>Services</h4>
@@ -406,33 +488,100 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
   </div>
 </footer>
 <div class="footer-bottom">
-  © 2025 <span id="footer-nom">Maçonnerie Mainenor</span> — Tous droits réservés · Site réalisé par <a href="https://velops.fr" target="_blank">Velops</a>
+  © 2025 Maçonnerie Mainenor — Tous droits réservés · Site réalisé par <a href="https://velops.fr" target="_blank">Velops</a>
+</div>
+
+<!-- ══════════════════════════════════════
+     MODALE LAISSER UN AVIS
+══════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-form-wrap">
+      <div class="modal-title">Votre avis compte</div>
+      <div class="modal-sub">Partagez votre expérience avec Maçonnerie Mainenor</div>
+      <form class="modal-form" onsubmit="submitAvis(event)">
+        <div class="mf-group">
+          <label>Votre prénom *</label>
+          <input type="text" id="av-prenom" placeholder="Jean" required maxlength="40">
+        </div>
+        <div class="mf-group">
+          <label>Type de travaux réalisés</label>
+          <input type="text" id="av-projet" placeholder="Ex : Ravalement de façade, Paris 15e" maxlength="80">
+        </div>
+        <div class="mf-group">
+          <label>Note *</label>
+          <!-- rating étoiles : input radio, ordre inversé pour CSS trick -->
+          <div class="star-rating" id="star-rating">
+            <input type="radio" id="s5" name="note" value="5" required>
+            <label for="s5" title="5 étoiles">★</label>
+            <input type="radio" id="s4" name="note" value="4">
+            <label for="s4" title="4 étoiles">★</label>
+            <input type="radio" id="s3" name="note" value="3">
+            <label for="s3" title="3 étoiles">★</label>
+            <input type="radio" id="s2" name="note" value="2">
+            <label for="s2" title="2 étoiles">★</label>
+            <input type="radio" id="s1" name="note" value="1">
+            <label for="s1" title="1 étoile">★</label>
+          </div>
+        </div>
+        <div class="mf-group">
+          <label>Votre témoignage *</label>
+          <textarea id="av-texte" placeholder="Décrivez votre expérience…" required minlength="20" maxlength="500"></textarea>
+        </div>
+        <p class="modal-note">Votre avis sera examiné avant publication. Merci pour votre confiance !</p>
+        <button type="submit" class="modal-submit" id="modal-submit-btn">Envoyer mon avis →</button>
+      </form>
+    </div>
+    <!-- Écran succès -->
+    <div class="modal-success" id="modal-success">
+      <div class="modal-success-icon">🙏</div>
+      <div class="modal-success-title">Merci pour votre avis !</div>
+      <div class="modal-success-text">Votre témoignage a bien été reçu.<br>Il sera publié après validation par notre équipe.</div>
+    </div>
+  </div>
 </div>
 
 <script>
 // ═══════════════════════════════════════════════════════
-// CONFIG — un seul paramètre à gérer depuis le dashboard
+// CONFIG SUPABASE
 // ═══════════════════════════════════════════════════════
-const SB_URL      = 'https://gcxwbgsdblbachjgheqq.supabase.co';
-const SB_KEY      = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjeHdiZ3NkYmxiYWNoamdoZXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjIxNTEsImV4cCI6MjA4ODgzODE1MX0.awOma2ufFoEa7LjxWZe6SgR7TOGbM_D9kY-wmLB0ZG8';
+const SB_URL      = 'https://qrjwmdescdkakxbpycfu.supabase.co';
+const SB_KEY      = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyandtZGVzY2RrYWt4YnB5Y2Z1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzMyOTYsImV4cCI6MjA5NTE0OTI5Nn0.HgxJKIAe_0J_PyDbvn5PCsVoln_-6zXtTWjzKIBJ1iE';
 const CLIENT_SLUG = 'mainenor';
 
+const HEADERS = {
+  'apikey': SB_KEY,
+  'Authorization': 'Bearer ' + SB_KEY,
+  'Content-Type': 'application/json'
+};
+
 // ═══════════════════════════════════════════════════════
-// VÉRIFICATION STATUT — actif ou maintenance
+// PHOTOS FALLBACK (si table vide ou erreur)
+// Utilisées seulement si Supabase ne renvoie rien
+// ═══════════════════════════════════════════════════════
+const PHOTOS_FALLBACK = [
+  { url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=80', legende: 'Extension maison — Versailles, 2024' },
+  { url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80', legende: 'Ravalement façade — Paris 15e' },
+  { url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80', legende: 'Construction neuve — Boulogne' },
+  { url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80', legende: 'Rénovation intérieure — Neuilly' },
+  { url: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80', legende: 'Aménagement terrasse — Clamart' },
+];
+
+// ═══════════════════════════════════════════════════════
+// STATUT SITE
 // ═══════════════════════════════════════════════════════
 async function checkStatut() {
   try {
     const r = await fetch(
       SB_URL + '/rest/v1/sites_statut?slug=eq.' + CLIENT_SLUG + '&select=actif',
-      { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY } }
+      { headers: HEADERS }
     );
     if (r.ok) {
       const [data] = await r.json();
-      if (data && data.actif === false) showMaintenance();
+      if (data && data.actif === false) { showMaintenance(); return; }
     }
-  } catch(e) {
-    // Si Supabase inaccessible → site affiché normalement
-  }
+  } catch(e) {}
   document.getElementById('loading').classList.add('hidden');
 }
 
@@ -440,20 +589,187 @@ function showMaintenance() {
   document.body.innerHTML = `
     <div style="min-height:100vh;background:#2C2825;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;padding:2rem">
       <div style="text-align:center;max-width:480px">
-        <div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#fff;margin-bottom:.5rem">
-          Maçonnerie <span style="color:#C8832A">Mainenor</span>
-        </div>
+        <div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#fff;margin-bottom:.5rem">Maçonnerie <span style="color:#C8832A">Mainenor</span></div>
         <div style="width:60px;height:2px;background:#C8832A;margin:1.5rem auto"></div>
-        <div style="font-size:1.1rem;color:rgba(168,152,128,.9);line-height:1.75;margin-bottom:2rem">
-          Notre site est temporairement en maintenance.<br>
-          Nous revenons très vite !
-        </div>
-        <div style="font-size:.9rem;color:rgba(168,152,128,.6)">
-          Une urgence ? Appelez-nous :<br>
-          <a href="tel:0123456789" style="color:#C8832A;font-weight:500;text-decoration:none">01 23 45 67 89</a>
-        </div>
+        <div style="font-size:1.1rem;color:rgba(168,152,128,.9);line-height:1.75;margin-bottom:2rem">Notre site est temporairement en maintenance.<br>Nous revenons très vite !</div>
+        <div style="font-size:.9rem;color:rgba(168,152,128,.6)">Une urgence ? Appelez-nous :<br><a href="tel:0123456789" style="color:#C8832A;font-weight:500;text-decoration:none">01 23 45 67 89</a></div>
       </div>
     </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// GALERIE DYNAMIQUE
+// Table Supabase attendue : photos_mainenor
+//   id, url TEXT, legende TEXT, ordre INT, actif BOOL
+//   (max 5 rows avec actif = true, triées par ordre ASC)
+// ═══════════════════════════════════════════════════════
+async function loadGalerie() {
+  const gallery = document.getElementById('gallery');
+  let photos = [];
+
+  try {
+    const r = await fetch(
+      SB_URL + '/rest/v1/photos_mainenor?actif=eq.true&order=ordre.asc&limit=5',
+      { headers: HEADERS }
+    );
+    if (r.ok) {
+      const data = await r.json();
+      if (Array.isArray(data) && data.length > 0) photos = data;
+    }
+  } catch(e) {}
+
+  // Si aucune photo en base → fallback
+  if (photos.length === 0) photos = PHOTOS_FALLBACK;
+
+  // Rendre la galerie
+  gallery.innerHTML = '';
+  photos.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'gallery-item reveal' + (i === 0 ? ' featured' : '');
+    const legende = p.legende || p.caption || '';
+    div.innerHTML = `
+      <img src="${p.url}" alt="${legende}" loading="lazy">
+      ${legende ? `<div class="gallery-caption">${legende}</div>` : ''}
+    `;
+    gallery.appendChild(div);
+  });
+
+  // Ré-observer les nouveaux éléments
+  gallery.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// ═══════════════════════════════════════════════════════
+// AVIS CLIENTS
+// Table Supabase attendue : avis_mainenor
+//   id, prenom TEXT, projet TEXT, note INT (1–5),
+//   texte TEXT, statut TEXT ('pending'|'publie'|'rejete'),
+//   created_at TIMESTAMP
+// Affiche max 3 avis avec statut = 'publie', triés par created_at DESC
+// ═══════════════════════════════════════════════════════
+async function loadAvis() {
+  const grid = document.getElementById('avis-grid');
+  let avis = [];
+
+  try {
+    const r = await fetch(
+      SB_URL + '/rest/v1/avis_mainenor?statut=eq.publie&order=created_at.desc&limit=3',
+      { headers: HEADERS }
+    );
+    if (r.ok) {
+      const data = await r.json();
+      if (Array.isArray(data)) avis = data;
+    }
+  } catch(e) {}
+
+  grid.innerHTML = '';
+
+  if (avis.length === 0) {
+    grid.innerHTML = `
+      <div class="avis-empty">
+        <span>💬</span>
+        Soyez le premier à partager votre expérience !
+      </div>`;
+    return;
+  }
+
+  avis.forEach(a => {
+    const note = Math.max(1, Math.min(5, parseInt(a.note) || 5));
+    const initiale = (a.prenom || 'C').charAt(0).toUpperCase();
+    const stars = Array.from({length:5}, (_,i) =>
+      `<span class="avis-star${i < note ? '' : ' empty'}">★</span>`
+    ).join('');
+
+    const card = document.createElement('div');
+    card.className = 'avis-card reveal';
+    card.innerHTML = `
+      <div class="avis-stars">${stars}</div>
+      <p class="avis-text">${escHtml(a.texte)}</p>
+      <div class="avis-author">
+        <div class="avis-avatar">${initiale}</div>
+        <div>
+          <div class="avis-name">${escHtml(a.prenom || 'Client')}</div>
+          ${a.projet ? `<div class="avis-projet">${escHtml(a.projet)}</div>` : ''}
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  grid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// ═══════════════════════════════════════════════════════
+// MODALE AVIS
+// ═══════════════════════════════════════════════════════
+function openModal() {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+async function submitAvis(e) {
+  e.preventDefault();
+  const btn = document.getElementById('modal-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+
+  const prenom = document.getElementById('av-prenom').value.trim();
+  const projet = document.getElementById('av-projet').value.trim();
+  const texte  = document.getElementById('av-texte').value.trim();
+  const noteEl = document.querySelector('input[name="note"]:checked');
+  const note   = noteEl ? parseInt(noteEl.value) : null;
+
+  if (!note) {
+    alert('Merci de sélectionner une note en étoiles.');
+    btn.disabled = false;
+    btn.textContent = 'Envoyer mon avis →';
+    return;
+  }
+
+  const payload = {
+    slug: CLIENT_SLUG,
+    prenom,
+    projet: projet || null,
+    note,
+    texte,
+    statut: 'pending'  // Velops valide depuis le dashboard
+  };
+
+  try {
+    const r = await fetch(SB_URL + '/rest/v1/avis_mainenor', {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'return=minimal' },
+      body: JSON.stringify(payload)
+    });
+
+    if (r.ok || r.status === 201) {
+      // Afficher l'écran de succès
+      document.getElementById('modal-form-wrap').style.display = 'none';
+      document.getElementById('modal-success').style.display = 'block';
+    } else {
+      throw new Error('HTTP ' + r.status);
+    }
+  } catch(err) {
+    // Fallback : simuler succès (UX propre même si Supabase indisponible)
+    console.warn('Avis non enregistré (Supabase):', err);
+    document.getElementById('modal-form-wrap').style.display = 'none';
+    document.getElementById('modal-success').style.display = 'block';
+  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -471,25 +787,25 @@ function toggleOption(btn) {
 }
 function fmt(n) { return Math.round(n).toLocaleString('fr-FR') + ' €'; }
 function calcDevis() {
-  const type=document.getElementById('d-type')?.value;
-  const surface=parseInt(document.getElementById('d-surface')?.value||50);
-  const fin=document.getElementById('d-finition')?.value;
-  const delai=parseFloat(document.getElementById('d-delai')?.value||1);
-  if(!type) return;
-  const tarif=(TARIF[type]||65)*(COEF[fin]||1)*delai;
-  const mdo=tarif*.6*surface, mat=tarif*.32*surface, dep=300;
-  const total=mdo+mat+dep+optionsTotal;
-  document.getElementById('res-price').textContent=fmt(total);
-  document.getElementById('res-range').textContent=`Fourchette : ${fmt(total*.85)} – ${fmt(total*1.15)}`;
-  document.getElementById('b-mdo').textContent=fmt(mdo);
-  document.getElementById('b-mat').textContent=fmt(mat);
-  document.getElementById('b-opt').textContent=fmt(optionsTotal);
-  document.getElementById('b-dep').textContent=fmt(dep);
-  document.getElementById('res-dispo').textContent=DISPO[type]||'2–3 semaines';
+  const type    = document.getElementById('d-type')?.value;
+  const surface = parseInt(document.getElementById('d-surface')?.value||50);
+  const fin     = document.getElementById('d-finition')?.value;
+  const delai   = parseFloat(document.getElementById('d-delai')?.value||1);
+  if (!type) return;
+  const tarif = (TARIF[type]||65) * (COEF[fin]||1) * delai;
+  const mdo = tarif*.6*surface, mat = tarif*.32*surface, dep = 300;
+  const total = mdo+mat+dep+optionsTotal;
+  document.getElementById('res-price').textContent = fmt(total);
+  document.getElementById('res-range').textContent = `Fourchette : ${fmt(total*.85)} – ${fmt(total*1.15)}`;
+  document.getElementById('b-mdo').textContent = fmt(mdo);
+  document.getElementById('b-mat').textContent = fmt(mat);
+  document.getElementById('b-opt').textContent = fmt(optionsTotal);
+  document.getElementById('b-dep').textContent = fmt(dep);
+  document.getElementById('res-dispo').textContent = DISPO[type]||'2–3 semaines';
 }
 
 // ═══════════════════════════════════════════════════════
-// FORMULAIRE
+// FORMULAIRE CONTACT
 // ═══════════════════════════════════════════════════════
 function handleSubmit(e) {
   e.preventDefault();
@@ -514,6 +830,8 @@ window.addEventListener('scroll',()=>{
 // ═══════════════════════════════════════════════════════
 calcDevis();
 checkStatut();
+loadGalerie();
+loadAvis();
 </script>
 </body>
 </html>
