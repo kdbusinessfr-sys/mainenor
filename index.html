@@ -37,6 +37,13 @@ nav.scrolled{padding:.8rem 5vw}
 .hero-title span{color:var(--accent)}
 .hero-sub{font-size:1.05rem;font-weight:300;color:rgba(255,255,255,.75);line-height:1.75;max-width:520px;margin-bottom:2.5rem;opacity:0;animation:fadeUp .6s .6s forwards}
 .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeUp .6s .8s forwards}
+.hero-rating{display:none;align-items:center;gap:.7rem;margin-bottom:1.6rem;opacity:0;animation:fadeUp .6s .7s forwards}
+.hero-rating.show{display:flex}
+.hero-rating .stars{display:flex;gap:2px;font-size:1.05rem;letter-spacing:1px}
+.hero-rating .stars .on{color:var(--accent)}
+.hero-rating .stars .off{color:rgba(255,255,255,.25)}
+.hero-rating .rating-text{font-size:.85rem;color:rgba(255,255,255,.75);font-weight:400}
+.hero-rating .rating-text b{color:var(--white);font-weight:600}
 .btn-primary{background:var(--accent);color:var(--white);padding:.9rem 2rem;text-decoration:none;font-size:.88rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;border-radius:2px;transition:background .2s,transform .15s;display:inline-block}
 .btn-primary:hover{background:var(--accent-dark);transform:translateY(-2px)}
 .btn-outline{border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.8);padding:.9rem 2rem;text-decoration:none;font-size:.88rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;border-radius:2px;transition:border-color .2s,color .2s;display:inline-block}
@@ -187,7 +194,30 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .avis-dot{width:8px;height:8px;border-radius:50%;background:rgba(168,152,128,.3);border:none;cursor:pointer;transition:all .25s;padding:0}
 .avis-dot.active{background:var(--accent);width:22px;border-radius:4px}
 
-/* Skeleton avis */
+/* Bandeau note moyenne (section avis) */
+.avis-rating-banner{display:none;align-items:center;gap:3rem;flex-wrap:wrap;background:rgba(255,255,255,.04);border:1px solid rgba(168,152,128,.15);border-radius:2px;padding:2rem 2.5rem;margin-bottom:2.5rem}
+.avis-rating-banner.show{display:flex}
+.arb-score{text-align:center;flex-shrink:0}
+.arb-score-num{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:900;color:var(--white);line-height:1}
+.arb-score-stars{display:flex;gap:3px;justify-content:center;margin:.5rem 0;font-size:1.1rem}
+.arb-score-stars .on{color:var(--accent)}
+.arb-score-stars .off{color:rgba(168,152,128,.3)}
+.arb-score-count{font-size:.8rem;color:var(--stone-light)}
+.arb-divider{width:1px;align-self:stretch;background:rgba(168,152,128,.2);flex-shrink:0}
+.arb-breakdown{flex:1;display:flex;flex-direction:column;gap:.5rem;min-width:220px}
+.arb-row{display:flex;align-items:center;gap:.7rem;font-size:.8rem;color:var(--stone-light)}
+.arb-row .arb-label{width:32px;flex-shrink:0}
+.arb-row .arb-bar-bg{flex:1;height:6px;background:rgba(168,152,128,.15);border-radius:4px;overflow:hidden}
+.arb-row .arb-bar-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .6s ease}
+.arb-row .arb-pct{width:34px;text-align:right;flex-shrink:0;color:rgba(168,152,128,.8)}
+@media(max-width:768px){
+  .avis-rating-banner{flex-direction:column;align-items:stretch;gap:1.5rem;padding:1.5rem}
+  .arb-divider{display:none}
+  .arb-score{display:flex;align-items:center;gap:1rem;text-align:left}
+  .arb-score-stars{margin:0}
+}
+
+
 .avis-skeleton{background:rgba(255,255,255,.03);border:1px solid rgba(168,152,128,.08);border-radius:2px;padding:2rem;height:200px;animation:shimmer 1.5s infinite}
 /* État vide */
 .avis-empty{text-align:center;padding:3rem;color:var(--stone-light);font-size:.95rem}
@@ -321,6 +351,10 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
     <div class="hero-tag">Maçonnerie &amp; Rénovation — Région Hauts-de-France</div>
     <h1 class="hero-title">L'artisanat<br>au <span>service</span><br>de vos projets</h1>
     <p class="hero-sub">Depuis 15 ans, Décor &amp; Vous transforme vos espaces avec précision et passion. Construction, rénovation, ravalement — nous réalisons votre vision.</p>
+    <div class="hero-rating" id="hero-rating">
+      <span class="stars" id="hero-rating-stars"></span>
+      <span class="rating-text"><b id="hero-rating-num">4,9/5</b> · <span id="hero-rating-count">0 avis clients</span></span>
+    </div>
     <div class="hero-btns">
       <a href="#simulateur" class="btn-primary">Estimer mon projet</a>
       <a href="#realisations" class="btn-outline">Voir nos réalisations</a>
@@ -507,6 +541,18 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
       <h2 class="section-title" style="color:var(--white)">Avis de<br>nos clients</h2>
     </div>
     <button class="btn-avis" onclick="openModal()">✍️ Laisser un avis</button>
+  </div>
+
+  <div class="avis-rating-banner" id="avis-rating-banner">
+    <div class="arb-score">
+      <div>
+        <div class="arb-score-num" id="arb-score-num">4,9</div>
+        <div class="arb-score-stars" id="arb-score-stars"></div>
+        <div class="arb-score-count" id="arb-score-count">Basé sur 0 avis</div>
+      </div>
+    </div>
+    <div class="arb-divider"></div>
+    <div class="arb-breakdown" id="arb-breakdown"></div>
   </div>
 
   <div class="avis-carousel" id="avis-carousel">
@@ -738,6 +784,70 @@ async function loadAvis() {
 
   avisData = avis;
   renderAvisCarousel();
+  renderAvisRating();
+}
+
+// ═══════════════════════════════════════════════════════
+// NOTE MOYENNE — hero badge + bandeau section avis
+// Seuil minimum de 5 avis publiés avant affichage,
+// pour éviter une moyenne peu représentative.
+// ═══════════════════════════════════════════════════════
+const AVIS_SEUIL_AFFICHAGE = 5;
+
+function starsHtml(noteDecimale, size) {
+  // noteDecimale : ex 4.7 -> 4 pleines + 1 vide (pas de demi-étoile, on arrondit au plus proche)
+  const rounded = Math.round(noteDecimale);
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    html += `<span class="${i <= rounded ? 'on' : 'off'}">★</span>`;
+  }
+  return html;
+}
+
+function renderAvisRating() {
+  const heroBlock = document.getElementById('hero-rating');
+  const banner    = document.getElementById('avis-rating-banner');
+  const total     = avisData.length;
+
+  if (total < AVIS_SEUIL_AFFICHAGE) {
+    heroBlock.classList.remove('show');
+    banner.classList.remove('show');
+    return;
+  }
+
+  const sum = avisData.reduce((s, a) => s + (Math.max(1, Math.min(5, parseInt(a.note) || 0))), 0);
+  const moyenne = sum / total;
+  const moyenneStr = moyenne.toFixed(1).replace('.', ',');
+
+  // ── Badge hero ──
+  document.getElementById('hero-rating-stars').innerHTML = starsHtml(moyenne);
+  document.getElementById('hero-rating-num').textContent = moyenneStr + '/5';
+  document.getElementById('hero-rating-count').textContent = total + (total === 1 ? ' avis client' : ' avis clients');
+  heroBlock.classList.add('show');
+
+  // ── Bandeau section avis ──
+  document.getElementById('arb-score-num').textContent = moyenneStr;
+  document.getElementById('arb-score-stars').innerHTML = starsHtml(moyenne);
+  document.getElementById('arb-score-count').textContent = 'Basé sur ' + total + (total === 1 ? ' avis' : ' avis');
+
+  // Répartition par étoile (5 -> 1)
+  const counts = {5:0,4:0,3:0,2:0,1:0};
+  avisData.forEach(a => {
+    const n = Math.max(1, Math.min(5, parseInt(a.note) || 0));
+    counts[n] = (counts[n] || 0) + 1;
+  });
+  const breakdown = document.getElementById('arb-breakdown');
+  breakdown.innerHTML = [5,4,3,2,1].map(n => {
+    const pct = total > 0 ? Math.round((counts[n] / total) * 100) : 0;
+    return `
+      <div class="arb-row">
+        <span class="arb-label">${n} ★</span>
+        <span class="arb-bar-bg"><span class="arb-bar-fill" style="width:${pct}%"></span></span>
+        <span class="arb-pct">${pct}%</span>
+      </div>`;
+  }).join('');
+
+  banner.classList.add('show');
 }
 
 function escHtml(str) {
