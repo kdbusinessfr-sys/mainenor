@@ -148,9 +148,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .form-success{display:none;background:rgba(200,131,42,.1);border:1px solid var(--accent);color:var(--stone);padding:1.2rem;border-radius:2px;font-size:.9rem;text-align:center}
 
 /* ══════════════════════════════════════
-   ── AVIS CLIENTS ──
+   ── AVIS CLIENTS (CARROUSEL) ──
 ══════════════════════════════════════ */
-#avis{background:var(--stone);padding:6rem 5vw}
+#avis{background:var(--stone);padding:6rem 5vw;overflow:hidden}
 #avis .section-title{color:var(--white)}
 #avis .section-sub{color:var(--stone-light)}
 #avis .section-tag{color:var(--accent)}
@@ -158,22 +158,39 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .avis-header-text{}
 .btn-avis{background:transparent;border:1px solid rgba(200,131,42,.5);color:var(--accent);padding:.75rem 1.6rem;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.6rem}
 .btn-avis:hover{background:var(--accent);color:var(--white);border-color:var(--accent)}
-.avis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-.avis-card{background:rgba(255,255,255,.05);border:1px solid rgba(168,152,128,.12);padding:2rem;border-radius:2px;position:relative;transition:border-color .3s}
+
+/* Carrousel container */
+.avis-carousel{position:relative}
+.avis-viewport{overflow:hidden;width:100%}
+.avis-track{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.avis-slide{flex:0 0 100%;padding:0 .75rem;box-sizing:border-box}
+@media(min-width:769px){
+  .avis-slide{flex:0 0 33.3333%}
+}
+.avis-card{background:rgba(255,255,255,.05);border:1px solid rgba(168,152,128,.12);padding:2rem;border-radius:2px;position:relative;transition:border-color .3s;height:100%;display:flex;flex-direction:column}
 .avis-card:hover{border-color:rgba(200,131,42,.35)}
 .avis-stars{display:flex;gap:3px;margin-bottom:1rem}
 .avis-star{color:var(--accent);font-size:1rem}
 .avis-star.empty{color:rgba(168,152,128,.25)}
-.avis-text{font-size:.92rem;font-weight:300;color:rgba(255,255,255,.8);line-height:1.75;margin-bottom:1.5rem;font-style:italic}
+.avis-text{font-size:.92rem;font-weight:300;color:rgba(255,255,255,.8);line-height:1.75;margin-bottom:1.5rem;font-style:italic;flex:1}
 .avis-text::before{content:'"';font-family:'Playfair Display',serif;font-size:3rem;color:rgba(200,131,42,.3);line-height:0;vertical-align:-.5rem;margin-right:.2rem}
 .avis-author{display:flex;align-items:center;gap:.75rem}
 .avis-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--white);font-size:.95rem;flex-shrink:0}
 .avis-name{font-size:.9rem;font-weight:500;color:var(--white)}
 .avis-projet{font-size:.78rem;color:var(--stone-light);margin-top:.1rem}
+
+/* Contrôles carrousel */
+.avis-controls{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-top:2.5rem}
+.avis-arrow{background:rgba(255,255,255,.06);border:1px solid rgba(168,152,128,.25);color:var(--white);width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .2s;flex-shrink:0}
+.avis-arrow:hover{background:var(--accent);border-color:var(--accent)}
+.avis-dots{display:flex;gap:.5rem}
+.avis-dot{width:8px;height:8px;border-radius:50%;background:rgba(168,152,128,.3);border:none;cursor:pointer;transition:all .25s;padding:0}
+.avis-dot.active{background:var(--accent);width:22px;border-radius:4px}
+
 /* Skeleton avis */
 .avis-skeleton{background:rgba(255,255,255,.03);border:1px solid rgba(168,152,128,.08);border-radius:2px;padding:2rem;height:200px;animation:shimmer 1.5s infinite}
 /* État vide */
-.avis-empty{text-align:center;padding:3rem;color:var(--stone-light);font-size:.95rem;grid-column:span 3}
+.avis-empty{text-align:center;padding:3rem;color:var(--stone-light);font-size:.95rem}
 .avis-empty span{display:block;font-size:2rem;margin-bottom:.8rem;opacity:.4}
 
 /* ══════════════════════════════════════
@@ -261,9 +278,7 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
   footer{grid-template-columns:1fr}
   .devis-result{position:static}
   .options-grid{grid-template-columns:1fr}
-  .avis-grid{grid-template-columns:1fr}
   .avis-header{flex-direction:column;align-items:flex-start}
-  .avis-empty{grid-column:span 1}
 }
 </style>
 </head>
@@ -483,7 +498,7 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
 </section>
 
 <!-- ══════════════════════════════════════
-     AVIS CLIENTS
+     AVIS CLIENTS (CARROUSEL)
 ══════════════════════════════════════ -->
 <section id="avis">
   <div class="avis-header">
@@ -493,11 +508,21 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
     </div>
     <button class="btn-avis" onclick="openModal()">✍️ Laisser un avis</button>
   </div>
-  <!-- Injecté dynamiquement -->
-  <div class="avis-grid" id="avis-grid">
-    <div class="avis-skeleton"></div>
-    <div class="avis-skeleton"></div>
-    <div class="avis-skeleton"></div>
+
+  <div class="avis-carousel" id="avis-carousel">
+    <div class="avis-viewport">
+      <div class="avis-track" id="avis-track">
+        <!-- Skeletons le temps du chargement -->
+        <div class="avis-slide"><div class="avis-skeleton"></div></div>
+        <div class="avis-slide"><div class="avis-skeleton"></div></div>
+        <div class="avis-slide"><div class="avis-skeleton"></div></div>
+      </div>
+    </div>
+    <div class="avis-controls" id="avis-controls" style="display:none">
+      <button class="avis-arrow" onclick="avisPrev()" aria-label="Avis précédent">&#8592;</button>
+      <div class="avis-dots" id="avis-dots"></div>
+      <button class="avis-arrow" onclick="avisNext()" aria-label="Avis suivant">&#8594;</button>
+    </div>
   </div>
 </section>
 
@@ -681,20 +706,28 @@ async function loadGalerie() {
 }
 
 // ═══════════════════════════════════════════════════════
-// AVIS CLIENTS
+// AVIS CLIENTS — CARROUSEL
 // Table Supabase attendue : avis_mainenor
 //   id, prenom TEXT, projet TEXT, note INT (1–5),
 //   texte TEXT, statut TEXT ('pending'|'publie'|'rejete'),
 //   created_at TIMESTAMP
-// Affiche max 3 avis avec statut = 'publie', triés par created_at DESC
+// Charge jusqu'à 15 avis publiés, triés par created_at DESC,
+// affichés 3 par 3 (desktop) / 1 par 1 (mobile) dans un carrousel
+// avec défilement automatique.
 // ═══════════════════════════════════════════════════════
+let avisData = [];
+let avisIndex = 0;
+let avisPerView = 3;
+let avisAutoTimer = null;
+const AVIS_AUTOPLAY_MS = 5500;
+
 async function loadAvis() {
-  const grid = document.getElementById('avis-grid');
+  const track = document.getElementById('avis-track');
   let avis = [];
 
   try {
     const r = await fetch(
-      SB_URL + '/rest/v1/avis_mainenor?statut=eq.publie&order=created_at.desc&limit=3',
+      SB_URL + '/rest/v1/avis_mainenor?statut=eq.publie&order=created_at.desc&limit=15',
       { headers: HEADERS }
     );
     if (r.ok) {
@@ -703,41 +736,8 @@ async function loadAvis() {
     }
   } catch(e) {}
 
-  grid.innerHTML = '';
-
-  if (avis.length === 0) {
-    grid.innerHTML = `
-      <div class="avis-empty">
-        <span>💬</span>
-        Soyez le premier à partager votre expérience !
-      </div>`;
-    return;
-  }
-
-  avis.forEach(a => {
-    const note = Math.max(1, Math.min(5, parseInt(a.note) || 5));
-    const initiale = (a.prenom || 'C').charAt(0).toUpperCase();
-    const stars = Array.from({length:5}, (_,i) =>
-      `<span class="avis-star${i < note ? '' : ' empty'}">★</span>`
-    ).join('');
-
-    const card = document.createElement('div');
-    card.className = 'avis-card reveal';
-    card.innerHTML = `
-      <div class="avis-stars">${stars}</div>
-      <p class="avis-text">${escHtml(a.texte)}</p>
-      <div class="avis-author">
-        <div class="avis-avatar">${initiale}</div>
-        <div>
-          <div class="avis-name">${escHtml(a.prenom || 'Client')}</div>
-          ${a.projet ? `<div class="avis-projet">${escHtml(a.projet)}</div>` : ''}
-        </div>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-
-  grid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  avisData = avis;
+  renderAvisCarousel();
 }
 
 function escHtml(str) {
@@ -747,6 +747,154 @@ function escHtml(str) {
     .replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;');
 }
+
+function updateAvisPerView() {
+  avisPerView = window.innerWidth > 768 ? 3 : 1;
+}
+
+function renderAvisCarousel() {
+  const track    = document.getElementById('avis-track');
+  const controls = document.getElementById('avis-controls');
+  updateAvisPerView();
+
+  if (avisData.length === 0) {
+    track.innerHTML = `
+      <div class="avis-slide" style="flex:0 0 100%">
+        <div class="avis-empty">
+          <span>💬</span>
+          Soyez le premier à partager votre expérience !
+        </div>
+      </div>`;
+    controls.style.display = 'none';
+    return;
+  }
+
+  track.innerHTML = avisData.map(a => {
+    const note = Math.max(1, Math.min(5, parseInt(a.note) || 5));
+    const initiale = (a.prenom || 'C').charAt(0).toUpperCase();
+    const stars = Array.from({length:5}, (_,i) =>
+      `<span class="avis-star${i < note ? '' : ' empty'}">★</span>`
+    ).join('');
+    return `
+      <div class="avis-slide">
+        <div class="avis-card">
+          <div class="avis-stars">${stars}</div>
+          <p class="avis-text">${escHtml(a.texte)}</p>
+          <div class="avis-author">
+            <div class="avis-avatar">${initiale}</div>
+            <div>
+              <div class="avis-name">${escHtml(a.prenom || 'Client')}</div>
+              ${a.projet ? `<div class="avis-projet">${escHtml(a.projet)}</div>` : ''}
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Contrôles visibles seulement s'il y a plus d'avis que de places visibles
+  const totalPages = Math.max(1, avisData.length - avisPerView + 1);
+  if (avisData.length > avisPerView) {
+    controls.style.display = 'flex';
+    renderAvisDots(totalPages);
+  } else {
+    controls.style.display = 'none';
+  }
+
+  avisIndex = 0;
+  applyAvisTransform();
+  startAvisAutoplay();
+}
+
+function renderAvisDots(totalPages) {
+  const dots = document.getElementById('avis-dots');
+  dots.innerHTML = '';
+  for (let i = 0; i < totalPages; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'avis-dot' + (i === 0 ? ' active' : '');
+    btn.setAttribute('aria-label', 'Aller au groupe d\'avis ' + (i+1));
+    btn.onclick = () => { avisIndex = i; applyAvisTransform(); restartAvisAutoplay(); };
+    dots.appendChild(btn);
+  }
+}
+
+function applyAvisTransform() {
+  const track = document.getElementById('avis-track');
+  const slideWidthPct = 100 / avisPerView;
+  track.style.transform = `translateX(-${avisIndex * slideWidthPct}%)`;
+
+  // maj dots actifs
+  document.querySelectorAll('.avis-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === avisIndex);
+  });
+}
+
+function avisMaxIndex() {
+  return Math.max(0, avisData.length - avisPerView);
+}
+
+function avisNext() {
+  const max = avisMaxIndex();
+  avisIndex = avisIndex >= max ? 0 : avisIndex + 1;
+  applyAvisTransform();
+}
+
+function avisPrev() {
+  const max = avisMaxIndex();
+  avisIndex = avisIndex <= 0 ? max : avisIndex - 1;
+  applyAvisTransform();
+}
+
+function startAvisAutoplay() {
+  stopAvisAutoplay();
+  if (avisData.length <= avisPerView) return;
+  avisAutoTimer = setInterval(avisNext, AVIS_AUTOPLAY_MS);
+}
+function stopAvisAutoplay() {
+  if (avisAutoTimer) clearInterval(avisAutoTimer);
+  avisAutoTimer = null;
+}
+function restartAvisAutoplay() {
+  startAvisAutoplay();
+}
+
+// Pause au survol / reprise à la sortie
+(function initAvisHoverPause(){
+  const carousel = document.getElementById('avis-carousel');
+  carousel.addEventListener('mouseenter', stopAvisAutoplay);
+  carousel.addEventListener('mouseleave', startAvisAutoplay);
+})();
+
+// Re-render au resize (changement desktop <-> mobile)
+let avisResizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(avisResizeTimer);
+  avisResizeTimer = setTimeout(() => {
+    const wasMobile = avisPerView === 1;
+    updateAvisPerView();
+    const isMobile = avisPerView === 1;
+    if (wasMobile !== isMobile) renderAvisCarousel();
+  }, 200);
+});
+
+// Swipe tactile (mobile)
+(function initAvisSwipe(){
+  const viewport = document.querySelector('.avis-viewport');
+  let startX = 0, isDown = false;
+  viewport.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    isDown = true;
+    stopAvisAutoplay();
+  }, {passive:true});
+  viewport.addEventListener('touchend', e => {
+    if (!isDown) return;
+    isDown = false;
+    const diff = e.changedTouches[0].clientX - startX;
+    if (Math.abs(diff) > 40) {
+      diff < 0 ? avisNext() : avisPrev();
+    }
+    startAvisAutoplay();
+  }, {passive:true});
+})();
 
 // ═══════════════════════════════════════════════════════
 // MODALE AVIS
