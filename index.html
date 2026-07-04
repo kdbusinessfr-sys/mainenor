@@ -87,6 +87,15 @@ nav.scrolled{padding:.8rem 5vw}
 .gallery-skeleton.featured{grid-column:span 2;aspect-ratio:16/9}
 .gallery-skeleton:not(.featured){aspect-ratio:4/3}
 @keyframes shimmer{0%,100%{opacity:.6}50%{opacity:1}}
+/* Nouvelle photo qui apparaît (bouton "Voir plus") */
+.gallery-item.appear{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.gallery-item.appear.visible{opacity:1;transform:translateY(0)}
+/* Bouton "Voir plus de réalisations" */
+.gallery-more-wrap{text-align:center;margin-top:2.5rem;display:none}
+.gallery-more-wrap.show{display:block}
+.gallery-more-btn{background:transparent;border:1px solid var(--stone-light);color:var(--stone);padding:.9rem 2.2rem;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;cursor:pointer;transition:all .2s}
+.gallery-more-btn:hover{background:var(--stone);color:var(--white);border-color:var(--stone)}
+.gallery-more-btn:disabled{opacity:.5;cursor:default}
 /* ── LIGHTBOX ── */
 .lightbox{position:fixed;inset:0;z-index:300;background:rgba(26,23,20,.96);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .3s}
 .lightbox.open{opacity:1;pointer-events:all}
@@ -401,6 +410,9 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
     <div class="gallery-skeleton reveal"></div>
     <div class="gallery-skeleton reveal"></div>
   </div>
+  <div class="gallery-more-wrap" id="gallery-more-wrap">
+    <button class="gallery-more-btn" id="gallery-more-btn" onclick="showMoreGallery()">Voir plus de réalisations</button>
+  </div>
 </section>
 
 <!-- SIMULATEUR -->
@@ -710,15 +722,26 @@ function showMaintenance() {
 // GALERIE DYNAMIQUE
 // Table Supabase attendue : photos_mainenor
 //   id, url TEXT, legende TEXT, ordre INT, actif BOOL
-//   (max 5 rows avec actif = true, triées par ordre ASC)
+//   (max 10 rows avec actif = true, triées par ordre ASC)
+//
+// Comportement : on affiche les 5 premières photos au chargement
+// (1 grande + 4 normales). S'il y a plus de photos disponibles
+// (jusqu'à 10 max), un bouton "Voir plus de réalisations" déplie
+// les photos restantes directement dans la grille, avec une
+// petite animation d'apparition.
 // ═══════════════════════════════════════════════════════
+const GALLERY_BATCH = 5;   // nombre de photos affichées par lot
+const GALLERY_MAX   = 10;  // plafond de photos chargées depuis Supabase
+
+let allPhotos    = [];  // toutes les photos chargées (jusqu'à GALLERY_MAX)
+let galleryShown = 0;   // nombre de photos déjà affichées dans la grille
+
 async function loadGalerie() {
-  const gallery = document.getElementById('gallery');
   let photos = [];
 
   try {
     const r = await fetch(
-      SB_URL + '/rest/v1/photos_mainenor?actif=eq.true&order=ordre.asc&limit=5',
+      SB_URL + '/rest/v1/photos_mainenor?actif=eq.true&order=ordre.asc&limit=' + GALLERY_MAX,
       { headers: HEADERS }
     );
     if (r.ok) {
@@ -730,25 +753,69 @@ async function loadGalerie() {
   // Si aucune photo en base → fallback
   if (photos.length === 0) photos = PHOTOS_FALLBACK;
 
-  // Rendre la galerie
-  gallery.innerHTML = '';
-  photos.forEach((p, i) => {
-    const div = document.createElement('div');
-    div.className = 'gallery-item reveal' + (i === 0 ? ' featured' : '');
+  allPhotos = photos;
+  lbPhotos  = photos; // la lightbox peut naviguer sur l'ensemble, même les photos pas encore dépliées
+
+  // Vider la grille (skeletons) et afficher le premier lot
+  document.getElementById('gallery').innerHTML = '';
+  galleryShown = 0;
+  renderGalleryBatch(GALLERY_BATCH);
+  updateGalleryMoreButton();
+}
+
+// Ajoute "count" photos supplémentaires à la grille, à partir de galleryShown
+function renderGalleryBatch(count) {
+  const gallery = document.getElementById('gallery');
+  const start = galleryShown;
+  const end   = Math.min(start + count, allPhotos.length);
+  const isFirstBatch = start === 0;
+
+  for (let i = start; i < end; i++) {
+    const p = allPhotos[i];
     const legende = p.legende || p.caption || '';
+    const div = document.createElement('div');
+    // La toute première photo (index 0) reste la grande photo "featured"
+    const isFeatured = i === 0;
+    div.className = 'gallery-item' + (isFeatured ? ' featured' : '') + (isFirstBatch ? ' reveal' : ' appear');
     div.setAttribute('onclick', `openLightbox(${i})`);
     div.innerHTML = `
       <img src="${p.url}" alt="${legende}" loading="lazy">
       ${legende ? `<div class="gallery-caption">${legende}</div>` : ''}
     `;
     gallery.appendChild(div);
-  });
 
-  // Stocker pour la lightbox
-  lbPhotos = photos;
+    if (isFirstBatch) {
+      observer.observe(div); // apparition au scroll, comme le reste de la page
+    } else {
+      // apparition immédiate en fondu, avec un léger décalage par photo
+      requestAnimationFrame(() => {
+        setTimeout(() => div.classList.add('visible'), (i - start) * 90);
+      });
+    }
+  }
 
-  // Ré-observer les nouveaux éléments
-  gallery.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  galleryShown = end;
+}
+
+function showMoreGallery() {
+  const remaining = allPhotos.length - galleryShown;
+  if (remaining <= 0) return;
+  renderGalleryBatch(Math.min(GALLERY_BATCH, remaining));
+  updateGalleryMoreButton();
+}
+
+function updateGalleryMoreButton() {
+  const wrap = document.getElementById('gallery-more-wrap');
+  const btn  = document.getElementById('gallery-more-btn');
+  const remaining = allPhotos.length - galleryShown;
+
+  if (remaining > 0) {
+    wrap.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = `Voir plus de réalisations (+${Math.min(GALLERY_BATCH, remaining)})`;
+  } else {
+    wrap.classList.remove('show');
+  }
 }
 
 // ═══════════════════════════════════════════════════════
