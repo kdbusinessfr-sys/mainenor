@@ -224,6 +224,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .submit-btn{background:var(--accent);color:var(--white);padding:1.1rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;transition:background .2s,transform .15s}
 .submit-btn:hover{background:var(--accent-dark);transform:translateY(-2px)}
 .form-success{display:none;background:rgba(200,131,42,.1);border:1px solid var(--accent);color:var(--stone);padding:1.2rem;border-radius:2px;font-size:.9rem;text-align:center}
+.form-error{display:none;background:rgba(180,40,30,.08);border:1px solid #b4281e;color:var(--stone);padding:1.2rem;border-radius:2px;font-size:.9rem;text-align:center;line-height:1.6}
+.form-error a{color:var(--accent-dark);font-weight:600}
+.modal-error{display:none;color:#f0a39b;font-size:.82rem;line-height:1.6;margin-top:.6rem}
+.modal-error a{color:var(--accent)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 
 /* ══════════════════════════════════════
    ── AVIS CLIENTS (CARROUSEL) ──
@@ -598,8 +603,10 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
           <label>Comment nous avez-vous connus ?</label>
           <select><option>Bouche à oreille</option><option>Google</option><option>Réseaux sociaux</option><option>Autre</option></select>
         </div>
+        <div class="hp" aria-hidden="true"><label>Ne pas remplir ce champ</label><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
         <button type="submit" class="submit-btn">Envoyer ma demande →</button>
-        <div class="form-success" id="form-success">✅ Merci ! Nous vous répondons sous 24h ouvrées.</div>
+        <div class="form-success" id="form-success" role="status">✅ Merci ! Nous vous répondons sous 24h ouvrées.</div>
+        <div class="form-error" id="form-error" role="alert">Votre demande n'a pas pu être envoyée. Merci de réessayer, ou de nous appeler au <a href="tel:+33751048252">07 51 04 82 52</a>.</div>
       </form>
     </div>
   </div>
@@ -671,7 +678,7 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
   </div>
 </footer>
 <div class="footer-bottom">
-  © 2026 Décor & Vous — Tous droits réservés · Site réalisé par <a href="https://velops.fr" target="_blank">Velops</a>
+  © 2026 Décor & Vous — Tous droits réservés · Site réalisé par <a href="https://velops.fr" target="_blank" rel="noopener">Velops</a>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -712,8 +719,10 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
           <label>Votre témoignage *</label>
           <textarea id="av-texte" placeholder="Décrivez votre expérience…" required minlength="20" maxlength="500"></textarea>
         </div>
+        <div class="hp" aria-hidden="true"><label>Ne pas remplir ce champ</label><input type="text" id="av-website" tabindex="-1" autocomplete="off"></div>
         <p class="modal-note">Votre avis sera examiné avant publication. Merci pour votre confiance !</p>
         <button type="submit" class="modal-submit" id="modal-submit-btn">Envoyer mon avis →</button>
+        <p class="modal-error" id="modal-error" role="alert"></p>
       </form>
     </div>
     <!-- Écran succès -->
@@ -731,7 +740,6 @@ footer{background:var(--dark);padding:3rem 5vw;display:grid;grid-template-column
 // ═══════════════════════════════════════════════════════
 const SB_URL      = 'https://qrjwmdescdkakxbpycfu.supabase.co';
 const SB_KEY      = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyandtZGVzY2RrYWt4YnB5Y2Z1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzMyOTYsImV4cCI6MjA5NTE0OTI5Nn0.HgxJKIAe_0J_PyDbvn5PCsVoln_-6zXtTWjzKIBJ1iE';
-const CLIENT_SLUG = 'decorvous';
 
 const HEADERS = {
   'apikey': SB_KEY,
@@ -752,33 +760,14 @@ const PHOTOS_FALLBACK = [
 ];
 
 // ═══════════════════════════════════════════════════════
-// STATUT SITE
+// ÉCRAN DE CHARGEMENT
 // ═══════════════════════════════════════════════════════
-async function checkStatut() {
-  try {
-    const r = await fetch(
-      SB_URL + '/rest/v1/sites_statut?slug=eq.' + CLIENT_SLUG + '&select=actif',
-      { headers: HEADERS }
-    );
-    if (r.ok) {
-      const [data] = await r.json();
-      if (data && data.actif === false) { showMaintenance(); return; }
-    }
-  } catch(e) {}
-  document.getElementById('loading').classList.add('hidden');
+function hideLoading() {
+  const el = document.getElementById('loading');
+  if (el) el.classList.add('hidden');
 }
-
-function showMaintenance() {
-  document.body.innerHTML = `
-    <div style="min-height:100vh;background:#2C2825;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;padding:2rem">
-      <div style="text-align:center;max-width:480px">
-        <div style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#fff;margin-bottom:.5rem">Décor <span style="color:#C8832A">&amp; Vous</span></div>
-        <div style="width:60px;height:2px;background:#C8832A;margin:1.5rem auto"></div>
-        <div style="font-size:1.1rem;color:rgba(168,152,128,.9);line-height:1.75;margin-bottom:2rem">Notre site est temporairement en maintenance.<br>Nous revenons très vite !</div>
-        <div style="font-size:.9rem;color:rgba(168,152,128,.6)">Une urgence ? Appelez-nous :<br><a href="tel:0751048252" style="color:#C8832A;font-weight:500;text-decoration:none">07 51 04 82 52</a></div>
-      </div>
-    </div>`;
-}
+window.addEventListener('load', hideLoading);
+setTimeout(hideLoading, 2500); // sécurité si une image externe est lente
 
 // ═══════════════════════════════════════════════════════
 // GALERIE DYNAMIQUE
@@ -841,8 +830,8 @@ function renderGalleryBatch(count) {
     div.className = 'gallery-item' + (isFeatured ? ' featured' : '') + (isFirstBatch ? ' reveal' : ' appear');
     div.setAttribute('onclick', `openLightbox(${i})`);
     div.innerHTML = `
-      <img src="${p.url}" alt="${legende}" loading="lazy">
-      ${legende ? `<div class="gallery-caption">${legende}</div>` : ''}
+      <img src="${escHtml(safeImgUrl(p.url))}" alt="${escHtml(legende)}" loading="lazy">
+      ${legende ? `<div class="gallery-caption">${escHtml(legende)}</div>` : ''}
     `;
     gallery.appendChild(div);
 
@@ -984,7 +973,14 @@ function escHtml(str) {
     .replace(/&/g,'&amp;')
     .replace(/</g,'&lt;')
     .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+// N'accepte que des adresses d'image http(s) ou relatives
+function safeImgUrl(u) {
+  u = String(u || '').trim();
+  return /^(https?:\/\/|\/)/i.test(u) ? u : '';
 }
 
 function updateAvisPerView() {
@@ -1178,6 +1174,16 @@ async function submitAvis(e) {
     statut: 'pending'
   };
 
+  const errEl = document.getElementById('modal-error');
+  errEl.style.display = 'none';
+
+  // Champ piège rempli = robot : on fait semblant d'accepter, sans rien envoyer
+  if (document.getElementById('av-website').value) {
+    document.getElementById('modal-form-wrap').style.display = 'none';
+    document.getElementById('modal-success').style.display = 'block';
+    return;
+  }
+
   try {
     const r = await fetch(SB_URL + '/rest/v1/avis_mainenor', {
       method: 'POST',
@@ -1185,18 +1191,16 @@ async function submitAvis(e) {
       body: JSON.stringify(payload)
     });
 
-    if (r.ok || r.status === 201) {
-      // Afficher l'écran de succès
-      document.getElementById('modal-form-wrap').style.display = 'none';
-      document.getElementById('modal-success').style.display = 'block';
-    } else {
-      throw new Error('HTTP ' + r.status);
-    }
-  } catch(err) {
-    // Fallback : simuler succès (UX propre même si Supabase indisponible)
-    console.warn('Avis non enregistré (Supabase):', err);
+    if (!(r.ok || r.status === 201)) throw new Error('HTTP ' + r.status);
+
     document.getElementById('modal-form-wrap').style.display = 'none';
     document.getElementById('modal-success').style.display = 'block';
+  } catch(err) {
+    console.warn('Avis non enregistré:', err);
+    errEl.innerHTML = 'Votre avis n\'a pas pu être envoyé. Merci de réessayer dans un instant, ou de nous le transmettre au <a href="tel:+33751048252">07 51 04 82 52</a>.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Envoyer mon avis →';
   }
 }
 
@@ -1241,11 +1245,25 @@ async function handleSubmit(e) {
   e.preventDefault();
   const form = e.target;
   const btn  = form.querySelector('.submit-btn');
+  const okEl  = document.getElementById('form-success');
+  const errEl = document.getElementById('form-error');
+  errEl.style.display = 'none';
+
+  const showSuccess = () => {
+    okEl.style.display = 'block';
+    form.querySelectorAll('input,textarea,select').forEach(el => el.disabled = true);
+    btn.style.display = 'none';
+  };
+
+  // Champ piège rempli = robot : on fait semblant d'accepter, sans rien envoyer
+  const piege = form.querySelector('input[name="website"]');
+  if (piege && piege.value) { showSuccess(); return; }
+
   btn.disabled = true;
   btn.textContent = 'Envoi en cours…';
 
-  const inputs = form.querySelectorAll('input,textarea,select');
-  const vals   = [...inputs].map(i => i.value.trim());
+  const inputs = [...form.querySelectorAll('input,textarea,select')].filter(el => el.name !== 'website');
+  const vals   = inputs.map(i => i.value.trim());
 
   const payload = {
     prenom       : vals[0] || null,
@@ -1269,10 +1287,14 @@ async function handleSubmit(e) {
     console.warn('Contact non enregistré:', err);
   }
 
-  // Succès ou fallback : on affiche toujours le message
-  document.getElementById('form-success').style.display = 'block';
-  inputs.forEach(el => el.disabled = true);
-  btn.style.display = 'none';
+  if (ok) {
+    showSuccess();
+  } else {
+    // Échec réel : on le dit, on garde ce que la personne a écrit
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Envoyer ma demande →';
+  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1306,7 +1328,6 @@ window.addEventListener('scroll',()=>{
 // INIT
 // ═══════════════════════════════════════════════════════
 calcDevis();
-checkStatut();
 loadGalerie();
 loadAvis();
 // ═══════════════════════════════════════════════════════
@@ -1336,7 +1357,7 @@ function updateLightbox() {
   if (!p) return;
   const img = document.getElementById('lb-img');
   img.style.opacity = '0';
-  img.src = p.url;
+  img.src = safeImgUrl(p.url);
   img.onload = () => { img.style.opacity = '1'; img.style.transition = 'opacity .25s'; };
   document.getElementById('lb-caption').textContent = p.legende || p.caption || '';
   document.getElementById('lb-counter').textContent = (lbIndex + 1) + ' / ' + lbPhotos.length;
